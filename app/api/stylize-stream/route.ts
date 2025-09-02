@@ -6,6 +6,7 @@ import { maybeStoreImage } from '@/lib/image';
 export const runtime = 'edge';
 
 const OPENAI_URL = 'https://api.openai.com/v1/images/edits';
+const REQUEST_TIMEOUT = 800000; // 60 seconds timeout
 
 /**
  * Streaming API route for image stylization with real-time progress updates
@@ -17,14 +18,44 @@ export async function POST(req: NextRequest) {
   const stream = new ReadableStream({
     async start(controller) {
       const t0 = Date.now();
+      let abortController = new AbortController();
+      let timeoutId: NodeJS.Timeout | null = null;
+      let progressInterval: NodeJS.Timeout | null = null;
+      let currentProgress = 10;
 
-      try {
-        // Send initial progress
+      // Set up timeout to prevent hanging requests
+      const cleanup = () => {
+        if (timeoutId) clearTimeout(timeoutId);
+        if (progressInterval) clearInterval(progressInterval);
+        if (!abortController.signal.aborted) {
+          abortController.abort();
+        }
+      };
+
+      // Helper function to send progress updates
+      const sendProgress = (progress: number, message: string) => {
+        currentProgress = progress;
         controller.enqueue(encoder.encode(`data: ${JSON.stringify({
           type: 'progress',
-          message: 'Parsing request...',
-          progress: 5
+          message,
+          progress
         })}\n\n`));
+      };
+
+      try {
+        // Set timeout for the entire operation
+        timeoutId = setTimeout(() => {
+          console.log('Request timeout - aborting OpenAI call');
+          controller.enqueue(encoder.encode(`data: ${JSON.stringify({
+            type: 'error',
+            message: 'Request timeout - generation took too long'
+          })}\n\n`));
+          cleanup();
+          controller.close();
+        }, REQUEST_TIMEOUT);
+
+        // Send initial progress
+        sendProgress(5, 'Parsing request...');
 
         const form = await req.formData();
         const {
@@ -45,16 +76,13 @@ export async function POST(req: NextRequest) {
             type: 'error',
             message: 'OpenAI API key not configured'
           })}\n\n`));
+          cleanup();
           controller.close();
           return;
         }
 
         // Send API request start
-        controller.enqueue(encoder.encode(`data: ${JSON.stringify({
-          type: 'progress',
-          message: 'Starting OpenAI transformation...',
-          progress: 10
-        })}\n\n`));
+        sendProgress(10, 'Starting OpenAI transformation...');
 
         // Create FormData with proper array notation for images
         const fd = new FormData();
@@ -66,27 +94,61 @@ export async function POST(req: NextRequest) {
         fd.append('output_format', 'png');
         fd.append('background', 'auto');
         fd.append('stream', 'true');
-        // Use array notation as shown in OpenAI docs
         fd.append('image[]', file as unknown as Blob, 'upload.png');
+
+        console.log('Making OpenAI API call...', { prompt: prompt.substring(0, 100) + '...' });
+
+        sendProgress(15, 'Connecting to OpenAI...');
+
+        // Start intermediate progress updates during the API call
+        progressInterval = setInterval(() => {
+          if (currentProgress < 70) {
+            const increment = Math.random() * 3 + 1; // Random increment between 1-4
+            const newProgress = Math.min(currentProgress + increment, 70);
+            const messages = [
+              'Processing your image...',
+              'Analyzing composition...',
+              'Applying Sackboy transformation...',
+              'Generating craft textures...',
+              'Adding knitted details...',
+              'Creating plush aesthetics...',
+              'Rendering burlap textures...',
+              'Almost there...'
+            ];
+            const message = messages[Math.floor(Math.random() * messages.length)];
+            sendProgress(Math.floor(newProgress), message);
+          }
+        }, 2000); // Update every 2 seconds
 
         const res = await fetch(OPENAI_URL, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${apiKey}`,
           },
-          body: fd
+          body: fd,
+          signal: abortController.signal // Add abort signal
         });
+
+        // Clear the progress interval once we get a response
+        if (progressInterval) {
+          clearInterval(progressInterval);
+          progressInterval = null;
+        }
 
         if (!res.ok) {
           const err = await res.json().catch(() => ({} as any));
           const msg = err?.error?.message || `OpenAI error (${res.status})`;
+          console.error('OpenAI API error:', msg);
           controller.enqueue(encoder.encode(`data: ${JSON.stringify({
             type: 'error',
             message: msg
           })}\n\n`));
+          cleanup();
           controller.close();
           return;
         }
+
+        sendProgress(75, 'Receiving generated image...');
 
         // Process OpenAI's streaming response
         const reader = res.body?.getReader();
@@ -97,6 +159,7 @@ export async function POST(req: NextRequest) {
             type: 'error',
             message: 'No streaming response available'
           })}\n\n`));
+          cleanup();
           controller.close();
           return;
         }
@@ -104,70 +167,93 @@ export async function POST(req: NextRequest) {
         let buffer = '';
         let finalImage: string | undefined;
         let partialCount = 0;
+        let hasReceivedData = false;
 
-        while (true) {
-          const { done, value } = await reader.read();
+        try {
+          while (true) {
+            const { done, value } = await reader.read();
 
-          if (done) break;
-
-          // Append new chunk to buffer
-          buffer += decoder.decode(value, { stream: true });
-
-          // Process complete lines from buffer
-          const lines = buffer.split('\n');
-
-          // Keep the last (potentially incomplete) line in buffer
-          buffer = lines.pop() || '';
-
-          for (const line of lines) {
-            if (line.startsWith('event: ')) {
-              const event = line.slice(7).trim();
-              continue;
+            if (done) {
+              console.log('OpenAI stream completed');
+              break;
             }
 
-            if (line.startsWith('data: ')) {
-              try {
-                const jsonStr = line.slice(6).trim();
-                if (jsonStr) {
-                  const data = JSON.parse(jsonStr);
+            hasReceivedData = true;
 
-                  if (data.type === 'image_edit.partial_image') {
-                    partialCount++;
-                    const progress = Math.min(20 + (partialCount * 15), 80);
+            // Append new chunk to buffer
+            buffer += decoder.decode(value, { stream: true });
 
-                    // Forward partial image to client
-                    controller.enqueue(encoder.encode(`data: ${JSON.stringify({
-                      type: 'partial',
-                      data: {
-                        imageBase64: `data:image/png;base64,${data.b64_json}`,
-                        partialIndex: data.partial_image_index || partialCount
-                      },
-                      progress: progress,
-                      message: `Generating... (partial ${partialCount})`
-                    })}\n\n`));
+            // Process complete lines from buffer
+            const lines = buffer.split('\n');
 
-                  } else if (data.type === 'image_edit.completed') {
-                    finalImage = data.b64_json;
+            // Keep the last (potentially incomplete) line in buffer
+            buffer = lines.pop() || '';
 
-                    controller.enqueue(encoder.encode(`data: ${JSON.stringify({
-                      type: 'progress',
-                      message: 'Finalizing...',
-                      progress: 90
-                    })}\n\n`));
+            for (const line of lines) {
+              if (line.startsWith('event: ')) {
+                continue;
+              }
+
+              if (line.startsWith('data: ')) {
+                try {
+                  const jsonStr = line.slice(6).trim();
+                  if (jsonStr) {
+                    const data = JSON.parse(jsonStr);
+
+                    if (data.type === 'image_edit.partial_image') {
+                      partialCount++;
+                      const progress = Math.min(20 + (partialCount * 15), 80);
+
+                      controller.enqueue(encoder.encode(`data: ${JSON.stringify({
+                        type: 'partial',
+                        data: {
+                          imageBase64: `data:image/png;base64,${data.b64_json}`,
+                          partialIndex: data.partial_image_index || partialCount
+                        },
+                        progress: progress,
+                        message: `Generating... (partial ${partialCount})`
+                      })}\n\n`));
+
+                    } else if (data.type === 'image_edit.completed') {
+                      finalImage = data.b64_json;
+                      console.log('OpenAI generation completed');
+
+                      controller.enqueue(encoder.encode(`data: ${JSON.stringify({
+                        type: 'progress',
+                        message: 'Finalizing...',
+                        progress: 90
+                      })}\n\n`));
+                    }
                   }
+                } catch (parseError) {
+                  console.error('Error parsing OpenAI SSE data:', parseError);
                 }
-              } catch (parseError) {
-                console.error('Error parsing OpenAI SSE data:', parseError);
               }
             }
           }
+        } finally {
+          // Always close the reader
+          reader.releaseLock();
+        }
+
+        if (!finalImage && hasReceivedData) {
+          console.error('No final image received despite getting data');
+          controller.enqueue(encoder.encode(`data: ${JSON.stringify({
+            type: 'error',
+            message: 'Generation incomplete - no final image received'
+          })}\n\n`));
+          cleanup();
+          controller.close();
+          return;
         }
 
         if (!finalImage) {
+          console.error('No data received from OpenAI');
           controller.enqueue(encoder.encode(`data: ${JSON.stringify({
             type: 'error',
-            message: 'No final image received from OpenAI'
+            message: 'No response received from OpenAI'
           })}\n\n`));
+          cleanup();
           controller.close();
           return;
         }
@@ -183,6 +269,7 @@ export async function POST(req: NextRequest) {
         }
 
         const timingMs = Date.now() - t0;
+        console.log(`Generation completed in ${timingMs}ms`);
 
         // Send final result
         controller.enqueue(encoder.encode(`data: ${JSON.stringify({
@@ -195,14 +282,26 @@ export async function POST(req: NextRequest) {
           progress: 100
         })}\n\n`));
 
+        cleanup();
         controller.close();
 
       } catch (e: any) {
         console.error('Streaming API error:', e);
-        controller.enqueue(encoder.encode(`data: ${JSON.stringify({
-          type: 'error',
-          message: e?.message || 'Generation failed'
-        })}\n\n`));
+
+        if (e.name === 'AbortError') {
+          console.log('Request was aborted');
+          controller.enqueue(encoder.encode(`data: ${JSON.stringify({
+            type: 'error',
+            message: 'Request was cancelled or timed out'
+          })}\n\n`));
+        } else {
+          controller.enqueue(encoder.encode(`data: ${JSON.stringify({
+            type: 'error',
+            message: e?.message || 'Generation failed'
+          })}\n\n`));
+        }
+
+        cleanup();
         controller.close();
       }
     }
