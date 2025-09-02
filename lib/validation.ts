@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
-const ACCEPT = ['image/png', 'image/jpeg', 'image/webp'] as const;
+const ACCEPT = ['image/png', 'image/jpeg', 'image/webp'] as const; // Back to original formats
+const MAX_SIZE = 8 * 1024 * 1024; // Back to 8 MB
 
 /**
  * Parses and validates the multipart form data submitted to the API. Ensures
@@ -17,7 +18,7 @@ export async function parseForm(form: FormData) {
 
   const FileSchema = z.object({
     type: z.enum(ACCEPT as any),
-    size: z.number().max(8 * 1024 * 1024)
+    size: z.number().max(MAX_SIZE)
   });
   FileSchema.parse({ type: (file as any).type, size: (file as any).size });
 
@@ -40,6 +41,6 @@ export async function parseForm(form: FormData) {
 export function validateUpload(file: File): string | null {
   const allowed = ACCEPT as unknown as string[];
   if (!allowed.includes(file.type)) return 'Please upload a PNG, JPG, or WebP image.';
-  if (file.size > 8 * 1024 * 1024) return 'Image is too large (max 8 MB).';
+  if (file.size > MAX_SIZE) return 'Image is too large (max 8 MB).';
   return null;
 }
