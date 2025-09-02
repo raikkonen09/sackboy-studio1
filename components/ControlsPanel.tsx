@@ -8,6 +8,7 @@ export type ControlsValues = {
   styleStrength: 'low' | 'medium' | 'high';
   diorama: boolean;
   keepPrivate: boolean;
+  customPrompt: string;
 };
 
 // Helper function to get display label for size
@@ -36,7 +37,8 @@ export default function ControlsPanel({ onChange }: { onChange: (v: ControlsValu
     size: '1024x1024',
     styleStrength: 'medium',
     diorama: false,
-    keepPrivate: true
+    keepPrivate: true,
+    customPrompt: ''
   });
 
   useEffect(() => {
@@ -75,6 +77,19 @@ export default function ControlsPanel({ onChange }: { onChange: (v: ControlsValu
           <option value="medium">Medium</option>
           <option value="high">High</option>
         </select>
+      </div>
+
+      <div>
+        <label className="label">Custom Prompt (Optional)</label>
+        <textarea
+          className="input mt-2 w-full"
+          placeholder="Add extra details or specific styling instructions..."
+          value={values.customPrompt}
+          onChange={(e) =>
+            setValues((v) => ({ ...v, customPrompt: e.target.value }))
+          }
+          rows={3}
+        />
       </div>
 
       <div className="flex items-center gap-3">

@@ -15,9 +15,9 @@ export async function POST(req: NextRequest) {
   const t0 = Date.now();
   try {
     const form = await req.formData();
-    const { file, size, styleStrength, diorama, keepPrivate } = await parseForm(form);
+    const { file, size, styleStrength, diorama, keepPrivate, customPrompt } = await parseForm(form);
 
-    const prompt = buildPrompt({ styleStrength, diorama });
+    const prompt = buildPrompt({ styleStrength, diorama, customPrompt });
 
     const fd = new FormData();
     fd.append('model', 'gpt-image-1');

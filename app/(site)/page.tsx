@@ -19,10 +19,11 @@ export default function Page() {
   const [progress, setProgress] = useState(0);
   const [shareUrl, setShareUrl] = useState<string | null>(null);
   const controlsRef = useRef<ControlsValues>({
-    size: '1024',
+    size: '1024x1024',
     styleStrength: 'medium',
     diorama: false,
-    keepPrivate: true
+    keepPrivate: true,
+    customPrompt: ''
   });
 
   /**
@@ -48,6 +49,7 @@ export default function Page() {
       form.append('styleStrength', controlsRef.current.styleStrength);
       form.append('diorama', String(controlsRef.current.diorama));
       form.append('private', String(controlsRef.current.keepPrivate));
+      form.append('customPrompt', controlsRef.current.customPrompt);
 
       setProgress(30);
       const res = await fetch('/api/stylize', { method: 'POST', body: form });

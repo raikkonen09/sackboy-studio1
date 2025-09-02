@@ -13,6 +13,7 @@ export async function parseForm(form: FormData) {
   const styleStrength = form.get('styleStrength')?.toString() || 'medium';
   const diorama = form.get('diorama')?.toString() === 'true';
   const keepPrivate = form.get('private')?.toString() !== 'false';
+  const customPrompt = form.get('customPrompt')?.toString() || '';
 
   const FileSchema = z.object({
     type: z.enum(ACCEPT as any),
@@ -28,7 +29,8 @@ export async function parseForm(form: FormData) {
     size: SizeSchema.parse(size),
     styleStrength: StyleSchema.parse(styleStrength),
     diorama,
-    keepPrivate
+    keepPrivate,
+    customPrompt
   } as const;
 }
 
