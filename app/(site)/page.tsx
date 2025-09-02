@@ -36,12 +36,13 @@ export default function Page() {
   };
 
   /**
-   * Sends the selected image to the stylize API with current options and
-   * updates UI state throughout the process. Displays any errors via alert.
+   * Sends the selected image to the stylize streaming API with current options and
+   * updates UI state throughout the process with real-time progress updates.
    */
   const handleGenerate = async (file: File) => {
     setLoading(true);
-    setProgress(10);
+    setProgress(0);
+
     try {
       const form = new FormData();
       form.append('image', file, file.name);
@@ -51,18 +52,71 @@ export default function Page() {
       form.append('private', String(controlsRef.current.keepPrivate));
       form.append('customPrompt', controlsRef.current.customPrompt);
 
-      setProgress(30);
-      const res = await fetch('/api/stylize', { method: 'POST', body: form });
+      const res = await fetch('/api/stylize-stream', {
+        method: 'POST',
+        body: form
+      });
+
       if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
-        throw new Error(err?.error || `Unexpected error (${res.status})`);
+        throw new Error(`HTTP error! status: ${res.status}`);
       }
-      setProgress(70);
-      const json = await res.json();
-      const b64 = json.imageBase64 as string;
-      setStylizedSrc(b64);
-      setShareUrl(json.imageUrl || null);
-      setProgress(100);
+
+      const reader = res.body?.getReader();
+      const decoder = new TextDecoder();
+
+      if (!reader) {
+        throw new Error('No reader available');
+      }
+
+      let buffer = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+
+        if (done) break;
+
+        // Append new chunk to buffer
+        buffer += decoder.decode(value, { stream: true });
+
+        // Process complete lines from buffer
+        const lines = buffer.split('\n');
+
+        // Keep the last (potentially incomplete) line in buffer
+        buffer = lines.pop() || '';
+
+        for (const line of lines) {
+          if (line.startsWith('data: ')) {
+            try {
+              const jsonStr = line.slice(6).trim();
+              if (jsonStr) {
+                const data = JSON.parse(jsonStr);
+
+                switch (data.type) {
+                  case 'progress':
+                    setProgress(data.progress);
+                    console.log(`Progress: ${data.progress}% - ${data.message}`);
+                    break;
+
+                  case 'complete':
+                    const result = data.data;
+                    setStylizedSrc(result.imageBase64);
+                    setShareUrl(result.imageUrl || null);
+                    setProgress(100);
+                    break;
+
+                  case 'error':
+                    throw new Error(data.message);
+
+                  default:
+                    console.log('Unknown message type:', data.type);
+                }
+              }
+            } catch (parseError) {
+              console.error('Error parsing SSE data:', parseError, 'Line:', line.slice(6));
+            }
+          }
+        }
+      }
     } catch (e: any) {
       alert(e?.message || 'Failed to generate image.');
     } finally {
