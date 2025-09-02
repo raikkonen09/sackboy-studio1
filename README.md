@@ -15,7 +15,7 @@ A Next.js app that transforms your photo into a **knitted burlap plush craft** a
 
 ```bash
 npm i
-cp ..env.example ..env # put OPENAI_API_KEY
+cp ...env ..env # put OPENAI_API_KEY
 npm run dev
 ```
 

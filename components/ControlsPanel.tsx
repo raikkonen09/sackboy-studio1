@@ -4,11 +4,27 @@ import { useEffect, useState } from 'react';
 import clsx from 'clsx';
 
 export type ControlsValues = {
-  size: '512' | '768' | '1024';
+  size: '1024x1024' | '1024x1536' | '1536x1024' | 'auto';
   styleStrength: 'low' | 'medium' | 'high';
   diorama: boolean;
   keepPrivate: boolean;
 };
+
+// Helper function to get display label for size
+function getSizeLabel(size: string): string {
+  switch (size) {
+    case '1024x1024':
+      return '1:1';
+    case '1024x1536':
+      return '2:3';
+    case '1536x1024':
+      return '3:2';
+    case 'auto':
+      return 'Auto';
+    default:
+      return size;
+  }
+}
 
 /**
  * Panel of controls to tune the generation: size, style strength,
@@ -17,7 +33,7 @@ export type ControlsValues = {
  */
 export default function ControlsPanel({ onChange }: { onChange: (v: ControlsValues) => void }) {
   const [values, setValues] = useState<ControlsValues>({
-    size: '1024',
+    size: '1024x1024',
     styleStrength: 'medium',
     diorama: false,
     keepPrivate: true
@@ -33,14 +49,14 @@ export default function ControlsPanel({ onChange }: { onChange: (v: ControlsValu
     <div className="space-y-4">
       <div>
         <label className="label">Output Size</label>
-        <div className="mt-2 grid grid-cols-3 gap-2">
-          {(['512', '768', '1024'] as const).map((s) => (
+        <div className="mt-2 grid grid-cols-4 gap-2">
+          {(['1024x1024', '1024x1536', '1536x1024', 'auto'] as const).map((s) => (
             <button
               key={s}
               className={clsx('btn', values.size === s && 'ring-2 ring-accent/70')}
               onClick={() => setValues((v) => ({ ...v, size: s }))}
             >
-              {s}px
+              {getSizeLabel(s)}
             </button>
           ))}
         </div>

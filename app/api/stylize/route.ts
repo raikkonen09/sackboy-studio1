@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
     const fd = new FormData();
     fd.append('model', 'gpt-image-1');
     fd.append('prompt', prompt);
-    fd.append('size', `${size}x${size}`);
+    fd.append('size', size);
     // Note: we always send a PNG blob; data cleaning is done client side.
     fd.append('image', file as unknown as Blob, 'upload.png');
 

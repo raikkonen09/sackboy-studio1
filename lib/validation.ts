@@ -9,7 +9,7 @@ const ACCEPT = ['image/png', 'image/jpeg', 'image/webp'] as const;
 export async function parseForm(form: FormData) {
   const file = form.get('image');
   if (!file || !(file instanceof Blob)) throw new Error('Missing image.');
-  const size = form.get('size')?.toString() || '1024';
+  const size = form.get('size')?.toString() || '1024x1024';
   const styleStrength = form.get('styleStrength')?.toString() || 'medium';
   const diorama = form.get('diorama')?.toString() === 'true';
   const keepPrivate = form.get('private')?.toString() !== 'false';
@@ -20,7 +20,7 @@ export async function parseForm(form: FormData) {
   });
   FileSchema.parse({ type: (file as any).type, size: (file as any).size });
 
-  const SizeSchema = z.enum(['512', '768', '1024']);
+  const SizeSchema = z.enum(['1024x1024', '1024x1536', '1536x1024', 'auto']);
   const StyleSchema = z.enum(['low', 'medium', 'high']);
 
   return {
