@@ -83,22 +83,33 @@ export default function CaptionCanvas({ baseImageSrc, shareUrl }: Props) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(img, 0, 0);
     if (!caption) return;
+
     const fontFamily = font === 'rounded' ? 'ui-rounded, system-ui, sans-serif' : 'serif';
     ctx.font = `${size}px ${fontFamily}`;
     ctx.textAlign = 'left';
     ctx.textBaseline = 'top';
+
     // Snap guides (every 50px)
     const snappedX = Math.round(pos.x / 50) * 50;
     const snappedY = Math.round(pos.y / 50) * 50;
     const x = snappedX;
     const y = snappedY;
-    if (outline) {
-      ctx.lineWidth = Math.max(2, size / 16);
-      ctx.strokeStyle = 'rgba(0,0,0,0.8)';
-      ctx.strokeText(caption, x, y);
-    }
-    ctx.fillStyle = color;
-    ctx.fillText(caption, x, y);
+
+    // Split caption into lines and draw each line
+    const lines = caption.split('\n');
+    const lineHeight = size * 1.2; // Add some line spacing
+
+    lines.forEach((line, index) => {
+      const lineY = y + (index * lineHeight);
+
+      if (outline) {
+        ctx.lineWidth = Math.max(2, size / 16);
+        ctx.strokeStyle = 'rgba(0,0,0,0.8)';
+        ctx.strokeText(line, x, lineY);
+      }
+      ctx.fillStyle = color;
+      ctx.fillText(line, x, lineY);
+    });
   }
 
   function onMouseDown(e: React.MouseEvent) {
@@ -141,11 +152,12 @@ export default function CaptionCanvas({ baseImageSrc, shareUrl }: Props) {
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-        <input
-          className="input"
-          placeholder="Add a caption"
+        <textarea
+          className="input resize-none"
+          placeholder="Add a caption (use Enter for line breaks)"
           value={caption}
           onChange={(e) => setCaption(e.target.value)}
+          rows={2}
         />
         <div className="flex flex-wrap gap-2 items-center">
           <select className="input" value={font} onChange={(e) => setFont(e.target.value as any)}>
