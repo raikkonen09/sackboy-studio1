@@ -23,7 +23,9 @@ export default function Page() {
     styleStrength: 'medium',
     diorama: false,
     keepPrivate: true,
-    customPrompt: ''
+    customPrompt: '',
+    removeCaptions: false,
+    generationMode: 'transform'
   });
 
   /**
@@ -51,6 +53,8 @@ export default function Page() {
       form.append('diorama', String(controlsRef.current.diorama));
       form.append('private', String(controlsRef.current.keepPrivate));
       form.append('customPrompt', controlsRef.current.customPrompt);
+      form.append('removeCaptions', String(controlsRef.current.removeCaptions));
+      form.append('generationMode', controlsRef.current.generationMode);
 
       const res = await fetch('/api/stylize-stream', {
         method: 'POST',

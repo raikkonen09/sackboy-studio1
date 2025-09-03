@@ -9,6 +9,8 @@ export type ControlsValues = {
   diorama: boolean;
   keepPrivate: boolean;
   customPrompt: string;
+  removeCaptions: boolean;
+  generationMode: 'transform' | 'add_sackboy';
 };
 
 // Helper function to get display label for size
@@ -38,7 +40,9 @@ export default function ControlsPanel({ onChange }: { onChange: (v: ControlsValu
     styleStrength: 'medium',
     diorama: false,
     keepPrivate: true,
-    customPrompt: ''
+    customPrompt: '',
+    removeCaptions: false,
+    generationMode: 'transform'
   });
 
   useEffect(() => {
@@ -114,6 +118,33 @@ export default function ControlsPanel({ onChange }: { onChange: (v: ControlsValu
           }
         />
         <label htmlFor="keepPrivate">Keep my image private (no server storage)</label>
+      </div>
+
+      <div className="flex items-center gap-3">
+        <input
+          id="removeCaptions"
+          type="checkbox"
+          checked={values.removeCaptions}
+          onChange={(e) =>
+            setValues((v) => ({ ...v, removeCaptions: e.target.checked }))
+          }
+        />
+        <label htmlFor="removeCaptions">Remove Captions</label>
+      </div>
+
+      <div>
+        <label className="label">Generation Mode</label>
+        <div className="mt-2 grid grid-cols-2 gap-2">
+          {(['transform', 'add_sackboy'] as const).map((mode) => (
+            <button
+              key={mode}
+              className={clsx('btn', values.generationMode === mode && 'ring-2 ring-accent/70')}
+              onClick={() => setValues((v) => ({ ...v, generationMode: mode }))}
+            >
+              {mode === 'transform' ? 'Transform All' : 'Add Sackboy'}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );

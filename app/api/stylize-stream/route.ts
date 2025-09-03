@@ -65,9 +65,11 @@ export async function POST(req: NextRequest) {
           diorama,
           keepPrivate,
           customPrompt,
+          removeCaptions,
+          generationMode,
         } = await parseForm(form);
 
-        const prompt = buildPrompt({ styleStrength, diorama, customPrompt });
+        const prompt = buildPrompt({ styleStrength, diorama, customPrompt, removeCaptions, generationMode });
 
         // Check for API key
         const apiKey = process.env.OPENAI_API_KEY;

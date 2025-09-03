@@ -25,6 +25,8 @@ export async function POST(req: NextRequest) {
       diorama,
       keepPrivate,
       customPrompt,
+      removeCaptions,
+      generationMode,
     } = await parseForm(form);
 
     // Read n from form (optional). Default to 1 (original behavior).
@@ -32,7 +34,7 @@ export async function POST(req: NextRequest) {
     if (!Number.isFinite(n) || n < 1) n = 1;
     n = Math.min(n, MAX_TOTAL);
 
-    const prompt = buildPrompt({ styleStrength, diorama, customPrompt });
+    const prompt = buildPrompt({ styleStrength, diorama, customPrompt, removeCaptions, generationMode });
 
     // ---------- Single-image (original) path ----------
     if (n === 1) {

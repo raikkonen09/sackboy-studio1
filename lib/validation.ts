@@ -15,6 +15,8 @@ export async function parseForm(form: FormData) {
   const diorama = form.get('diorama')?.toString() === 'true';
   const keepPrivate = form.get('private')?.toString() !== 'false';
   const customPrompt = form.get('customPrompt')?.toString() || '';
+  const removeCaptions = form.get('removeCaptions')?.toString() === 'true';
+  const generationMode = form.get('generationMode')?.toString() || 'transform';
 
   const FileSchema = z.object({
     type: z.enum(ACCEPT as any),
@@ -24,6 +26,7 @@ export async function parseForm(form: FormData) {
 
   const SizeSchema = z.enum(['1024x1024', '1024x1536', '1536x1024', 'auto']);
   const StyleSchema = z.enum(['low', 'medium', 'high']);
+  const GenerationModeSchema = z.enum(['transform', 'add_sackboy']);
 
   return {
     file: file as File,
@@ -31,7 +34,9 @@ export async function parseForm(form: FormData) {
     styleStrength: StyleSchema.parse(styleStrength),
     diorama,
     keepPrivate,
-    customPrompt
+    customPrompt,
+    removeCaptions,
+    generationMode: GenerationModeSchema.parse(generationMode)
   } as const;
 }
 
