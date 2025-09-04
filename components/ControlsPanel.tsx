@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import clsx from 'clsx';
+import {APIResponse} from "playwright-core";
 
 export type ControlsValues = {
   size: '1024x1024' | '1024x1536' | '1536x1024' | 'auto';
@@ -11,6 +12,7 @@ export type ControlsValues = {
   customPrompt: string;
   removeCaptions: boolean;
   generationMode: 'transform' | 'add_sackboy' | 'random_crypto';
+  result: Response | null;
 };
 
 // Helper function to get display label for size
@@ -42,7 +44,8 @@ export default function ControlsPanel({ onChange }: { onChange: (v: ControlsValu
     keepPrivate: true,
     customPrompt: '',
     removeCaptions: false,
-    generationMode: 'transform'
+    generationMode: 'transform',
+    result: null
   });
 
   useEffect(() => {
@@ -59,7 +62,12 @@ export default function ControlsPanel({ onChange }: { onChange: (v: ControlsValu
           {(['1024x1024', '1024x1536', '1536x1024', 'auto'] as const).map((s) => (
             <button
               key={s}
-              className={clsx('btn', values.size === s && 'ring-2 ring-accent/70')}
+              className={clsx(
+                'btn text-xs font-medium transition-all duration-200',
+                values.size === s
+                  ? 'bg-orange-500 text-white border-orange-500 shadow-lg transform scale-105'
+                  : 'bg-orange-100/20 text-orange-200 border-orange-300/50 hover:bg-orange-200/30 hover:text-orange-100 hover:border-orange-400/70'
+              )}
               onClick={() => setValues((v) => ({ ...v, size: s }))}
             >
               {getSizeLabel(s)}
@@ -138,7 +146,12 @@ export default function ControlsPanel({ onChange }: { onChange: (v: ControlsValu
           {(['transform', 'add_sackboy', 'random_crypto'] as const).map((mode) => (
             <button
               key={mode}
-              className={clsx('btn text-xs', values.generationMode === mode && 'ring-2 ring-accent/70')}
+              className={clsx(
+                'btn text-xs font-medium transition-all duration-200',
+                values.generationMode === mode
+                  ? 'bg-orange-500 text-white border-orange-500 shadow-lg transform scale-105'
+                  : 'bg-orange-100/20 text-orange-200 border-orange-300/50 hover:bg-orange-200/30 hover:text-orange-100 hover:border-orange-400/70'
+              )}
               onClick={() => setValues((v) => ({ ...v, generationMode: mode }))}
             >
               {mode === 'transform' ? 'Transform All' : mode === 'add_sackboy' ? 'Add Sackboy' : 'Random Sackboy'}

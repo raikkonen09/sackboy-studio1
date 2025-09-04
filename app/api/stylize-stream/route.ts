@@ -129,7 +129,7 @@ export async function POST(req: NextRequest) {
               const message = messages[Math.floor(Math.random() * messages.length)];
               sendProgress(Math.floor(newProgress), message);
             }
-          }, 800); // Update every 800ms
+          }, 2000); // Update every 800ms
 
           // Now use gpt-image-1 to generate the image with streaming
           const imageGenerationRes = await fetch('https://api.openai.com/v1/images/generations', {
@@ -335,7 +335,7 @@ export async function POST(req: NextRequest) {
             const message = messages[Math.floor(Math.random() * messages.length)];
             sendProgress(Math.floor(newProgress), message);
           }
-        }, 500); // Update every 2 seconds
+        }, 2000); // Update every 2 seconds
 
         const res = await fetch(OPENAI_URL, {
           method: 'POST',

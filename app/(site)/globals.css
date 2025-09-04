@@ -2,31 +2,400 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Import Google Fonts for a playful, craft-like feel */
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&family=Nunito:wght@300;400;500;600;700;800&display=swap');
+
 :root {
   color-scheme: dark;
+  /* LittleBigPlanet inspired color palette */
+  --lbp-brown: #8B4513;
+  --lbp-cream: #F5F5DC;
+  --lbp-orange: #FF8C00;
+  --lbp-blue: #4169E1;
+  --lbp-green: #32CD32;
+  --lbp-purple: #9370DB;
+  --lbp-pink: #FF69B4;
+  --lbp-yellow: #FFD700;
+  --lbp-red: #DC143C;
+
+  /* Craft material textures */
+  --fabric-texture: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3Ccircle cx='10' cy='10' r='1'/%3E%3Ccircle cx='50' cy='50' r='1'/%3E%3Ccircle cx='10' cy='50' r='1'/%3E%3Ccircle cx='50' cy='10' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+
+  /* Burlap/fabric pattern */
+  --burlap-pattern: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.02' fill-rule='evenodd'%3E%3Cpath d='m0 40l40-40h-40v40zm40 0v-40h-40l40 40z'/%3E%3C/g%3E%3C/svg%3E");
 }
 
 html,
 body {
-  @apply bg-bg text-white min-h-screen;
+  @apply min-h-screen;
+  font-family: 'Nunito', sans-serif;
+  background: url('/background.png') repeat;
+  background-size: 400px 400px;
+  color: var(--lbp-cream);
+  position: relative;
 }
 
+/* Add subtle fabric texture overlay */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: var(--fabric-texture), var(--burlap-pattern);
+  background-size: 60px 60px, 40px 40px;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0.3;
+}
+
+/* Sackboy-inspired container with craft aesthetic */
 .container {
   @apply max-w-6xl mx-auto px-4;
+  position: relative;
 }
 
+/* Craft-style card with stitched borders */
 .card {
-  @apply bg-card rounded-2xl shadow-soft border border-white/5;
+  background: linear-gradient(145deg, #3A2318 0%, #2F1E14 100%);
+  border: 3px solid var(--lbp-orange);
+  border-radius: 20px;
+  box-shadow:
+          0 8px 32px rgba(0, 0, 0, 0.3),
+          inset 0 1px 0 rgba(255, 255, 255, 0.1),
+          0 0 0 1px rgba(255, 140, 0, 0.2);
+  position: relative;
+  overflow: hidden;
 }
 
+/* Stitched border effect */
+.card::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  right: 8px;
+  bottom: 8px;
+  border: 2px dashed rgba(245, 245, 220, 0.3);
+  border-radius: 12px;
+  pointer-events: none;
+}
+
+/* Playful button styling inspired by LBP UI */
 .btn {
-  @apply inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 active:bg-white/20 transition;
+  @apply inline-flex items-center gap-2 px-6 py-3 rounded-2xl transition-all duration-200;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 500;
+  background: linear-gradient(145deg, var(--lbp-orange) 0%, #E67300 100%);
+  color: white;
+  border: 2px solid #B85C00;
+  box-shadow:
+          0 4px 12px rgba(255, 140, 0, 0.3),
+          inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  position: relative;
+  overflow: hidden;
 }
 
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow:
+          0 6px 20px rgba(255, 140, 0, 0.4),
+          inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.btn:hover::before {
+  left: 100%;
+}
+
+.btn:active {
+  transform: translateY(0);
+  box-shadow:
+          0 2px 8px rgba(255, 140, 0, 0.3),
+          inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  transform: none;
+  cursor: not-allowed;
+}
+
+/* Craft-style input fields */
 .input {
-  @apply bg-white/5 border border-white/10 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-accent/50;
+  @apply rounded-xl px-4 py-3 outline-none transition-all duration-200;
+  background: linear-gradient(145deg, #2A1A10 0%, #1F1409 100%);
+  border: 2px solid rgba(255, 140, 0, 0.3);
+  color: var(--lbp-cream);
+  font-family: 'Nunito', sans-serif;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
+.input:focus {
+  border-color: var(--lbp-orange);
+  box-shadow:
+          inset 0 2px 4px rgba(0, 0, 0, 0.2),
+          0 0 0 3px rgba(255, 140, 0, 0.2);
+}
+
+.input::placeholder {
+  color: rgba(245, 245, 220, 0.5);
+}
+
+/* Playful label styling */
 .label {
-  @apply text-sm text-white/70;
+  @apply text-sm font-medium;
+  font-family: 'Fredoka', sans-serif;
+  color: var(--lbp-cream);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Header styling with craft aesthetic */
+h1 {
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 700;
+  color: var(--lbp-orange);
+  text-shadow:
+          0 2px 4px rgba(0, 0, 0, 0.8),
+          0 0 20px rgba(255, 140, 0, 0.3),
+          -1px -1px 0 rgba(0, 0, 0, 0.8),
+          1px -1px 0 rgba(0, 0, 0, 0.8),
+          -1px 1px 0 rgba(0, 0, 0, 0.8),
+          1px 1px 0 rgba(0, 0, 0, 0.8);
+  position: relative;
+}
+
+h1::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(90deg, var(--lbp-orange), var(--lbp-yellow));
+  border-radius: 2px;
+  box-shadow: 0 2px 4px rgba(255, 140, 0, 0.3);
+}
+
+/* Subtitle and description styling */
+p {
+  font-family: 'Nunito', sans-serif;
+  line-height: 1.6;
+  color: rgba(245, 245, 220, 0.9);
+  text-shadow:
+          0 1px 3px rgba(0, 0, 0, 0.8),
+          -1px -1px 0 rgba(0, 0, 0, 0.6),
+          1px -1px 0 rgba(0, 0, 0, 0.6),
+          -1px 1px 0 rgba(0, 0, 0, 0.6),
+          1px 1px 0 rgba(0, 0, 0, 0.6);
+}
+
+/* Add text borders for main content outside panels */
+.container > header h1,
+.container > header p,
+.container > footer p,
+.container > section > h2,
+.container > section > h3 {
+  text-shadow:
+          0 2px 4px rgba(0, 0, 0, 0.8),
+          -1px -1px 0 rgba(0, 0, 0, 0.7),
+          1px -1px 0 rgba(0, 0, 0, 0.7),
+          -1px 1px 0 rgba(0, 0, 0, 0.7),
+          1px 1px 0 rgba(0, 0, 0, 0.7);
+}
+
+/* Special styling for spans and badges outside panels */
+.container > header span {
+  text-shadow:
+          0 1px 2px rgba(0, 0, 0, 0.8),
+          -1px -1px 0 rgba(0, 0, 0, 0.6),
+          1px -1px 0 rgba(0, 0, 0, 0.6),
+          -1px 1px 0 rgba(0, 0, 0, 0.6),
+          1px 1px 0 rgba(0, 0, 0, 0.6);
+}
+
+/* Progress bar styling */
+.progress-bar {
+  background: linear-gradient(145deg, #2A1A10 0%, #1F1409 100%);
+  border: 2px solid rgba(255, 140, 0, 0.3);
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-fill {
+  background: linear-gradient(90deg, var(--lbp-green), var(--lbp-yellow), var(--lbp-orange));
+  height: 100%;
+  border-radius: 8px;
+  transition: width 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg,
+  transparent 25%,
+  rgba(255, 255, 255, 0.1) 25%,
+  rgba(255, 255, 255, 0.1) 50%,
+  transparent 50%,
+  transparent 75%,
+  rgba(255, 255, 255, 0.1) 75%);
+  background-size: 20px 20px;
+  animation: progress-stripes 1s linear infinite;
+}
+
+@keyframes progress-stripes {
+  0% { background-position: 0 0; }
+  100% { background-position: 20px 0; }
+}
+
+/* Image styling with craft borders */
+img {
+  border-radius: 16px;
+  box-shadow:
+          0 8px 24px rgba(0, 0, 0, 0.3),
+          0 0 0 3px rgba(255, 140, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+img:hover {
+  transform: scale(1.02);
+  box-shadow:
+          0 12px 32px rgba(0, 0, 0, 0.4),
+          0 0 0 3px rgba(255, 140, 0, 0.4);
+}
+
+/* Footer styling */
+footer {
+  font-family: 'Nunito', sans-serif;
+  color: rgba(245, 245, 220, 0.6);
+  font-size: 0.875rem;
+}
+
+/* Footer text with white color and borders */
+footer p {
+  color: white;
+  text-shadow:
+          0 1px 3px rgba(0, 0, 0, 0.8),
+          -1px -1px 0 rgba(0, 0, 0, 0.7),
+          1px -1px 0 rgba(0, 0, 0, 0.7),
+          -1px 1px 0 rgba(0, 0, 0, 0.7),
+          1px 1px 0 rgba(0, 0, 0, 0.7);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #2A1A10;
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(145deg, var(--lbp-orange), #E67300);
+  border-radius: 6px;
+  border: 2px solid #2A1A10;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(145deg, #E67300, var(--lbp-orange));
+}
+
+/* Selection styling */
+::selection {
+  background: rgba(255, 140, 0, 0.3);
+  color: var(--lbp-cream);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .card {
+    border-width: 2px;
+    border-radius: 16px;
+  }
+
+  .btn {
+    padding: 12px 20px;
+    border-radius: 16px;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+}
+
+/* Animation for page load */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.container > * {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.container > *:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.container > *:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+/* Placeholder for Sackboy character images */
+.sackboy-placeholder {
+  background: linear-gradient(145deg, #8B4513, #A0522D);
+  border: 3px dashed rgba(245, 245, 220, 0.5);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  color: rgba(245, 245, 220, 0.7);
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 500;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.sackboy-placeholder::before {
+  content: '🧸';
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+/* Craft material texture for backgrounds */
+.craft-texture {
+  background-image:
+          radial-gradient(circle at 25% 25%, rgba(255, 140, 0, 0.1) 0%, transparent 50%),
+          radial-gradient(circle at 75% 75%, rgba(50, 205, 50, 0.1) 0%, transparent 50%),
+          var(--burlap-pattern);
 }
