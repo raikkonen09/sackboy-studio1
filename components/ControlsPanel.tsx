@@ -10,7 +10,7 @@ export type ControlsValues = {
   keepPrivate: boolean;
   customPrompt: string;
   removeCaptions: boolean;
-  generationMode: 'transform' | 'add_sackboy';
+  generationMode: 'transform' | 'add_sackboy' | 'random_crypto';
 };
 
 // Helper function to get display label for size
@@ -134,14 +134,14 @@ export default function ControlsPanel({ onChange }: { onChange: (v: ControlsValu
 
       <div>
         <label className="label">Generation Mode</label>
-        <div className="mt-2 grid grid-cols-2 gap-2">
-          {(['transform', 'add_sackboy'] as const).map((mode) => (
+        <div className="mt-2 grid grid-cols-3 gap-2">
+          {(['transform', 'add_sackboy', 'random_crypto'] as const).map((mode) => (
             <button
               key={mode}
-              className={clsx('btn', values.generationMode === mode && 'ring-2 ring-accent/70')}
+              className={clsx('btn text-xs', values.generationMode === mode && 'ring-2 ring-accent/70')}
               onClick={() => setValues((v) => ({ ...v, generationMode: mode }))}
             >
-              {mode === 'transform' ? 'Transform All' : 'Add Sackboy'}
+              {mode === 'transform' ? 'Transform All' : mode === 'add_sackboy' ? 'Add Sackboy' : 'Random Sackboy'}
             </button>
           ))}
         </div>

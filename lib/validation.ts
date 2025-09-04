@@ -9,7 +9,6 @@ const MAX_SIZE = 8 * 1024 * 1024; // Back to 8 MB
  */
 export async function parseForm(form: FormData) {
   const file = form.get('image');
-  if (!file || !(file instanceof Blob)) throw new Error('Missing image.');
   const size = form.get('size')?.toString() || '1024x1024';
   const styleStrength = form.get('styleStrength')?.toString() || 'medium';
   const diorama = form.get('diorama')?.toString() === 'true';
@@ -18,18 +17,23 @@ export async function parseForm(form: FormData) {
   const removeCaptions = form.get('removeCaptions')?.toString() === 'true';
   const generationMode = form.get('generationMode')?.toString() || 'transform';
 
-  const FileSchema = z.object({
-    type: z.enum(ACCEPT as any),
-    size: z.number().max(MAX_SIZE)
-  });
-  FileSchema.parse({ type: (file as any).type, size: (file as any).size });
+  // For random_crypto mode, we don't need an uploaded file
+  if (generationMode !== 'random_crypto') {
+    if (!file || !(file instanceof Blob)) throw new Error('Missing image.');
+
+    const FileSchema = z.object({
+      type: z.enum(ACCEPT as any),
+      size: z.number().max(MAX_SIZE)
+    });
+    FileSchema.parse({ type: (file as any).type, size: (file as any).size });
+  }
 
   const SizeSchema = z.enum(['1024x1024', '1024x1536', '1536x1024', 'auto']);
   const StyleSchema = z.enum(['low', 'medium', 'high']);
-  const GenerationModeSchema = z.enum(['transform', 'add_sackboy']);
+  const GenerationModeSchema = z.enum(['transform', 'add_sackboy', 'random_crypto']);
 
   return {
-    file: file as File,
+    file: file as File | null,
     size: SizeSchema.parse(size),
     styleStrength: StyleSchema.parse(styleStrength),
     diorama,

@@ -7,11 +7,13 @@ export default function GenerateButton({
   disabled,
   loading,
   progress,
+  progressMessage,
   onClick
 }: {
   disabled?: boolean;
   loading?: boolean;
   progress?: number;
+  progressMessage?: string;
   onClick: () => void;
 }) {
   return (
@@ -21,7 +23,13 @@ export default function GenerateButton({
       onClick={onClick}
       aria-live="polite"
     >
-      {loading ? <span>Generating… {progress ?? 0}%</span> : <span>Generate</span>}
+      {loading ? (
+        <span>
+          {progressMessage || 'Generating...'} {progress ?? 0}%
+        </span>
+      ) : (
+        <span>Generate</span>
+      )}
     </button>
   );
 }
