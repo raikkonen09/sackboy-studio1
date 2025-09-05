@@ -278,7 +278,7 @@ export default function Page() {
                     <div className="card p-4 flex items-center gap-3 justify-center lg:justify-start">
                       <img src="/favicon.webp" className="w-[50px] h-auto" alt="Sackboy Studio Icon" />
                       <h1 className="text-4xl lg:text-5xl font-bold">
-                        🧸 Sackboy Studio
+                         Sackboy Studio
                       </h1>
                     </div>
                     <div className="flex items-center gap-3">
