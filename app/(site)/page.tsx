@@ -272,24 +272,33 @@ export default function Page() {
             // Show full interface
             <main className="container py-10 space-y-10">
               {/* Hero Header with LittleBigPlanet inspiration */}
-              <header className="space-y-6 text-center lg:text-left">
+              <header className="card p-6 space-y-6 text-center lg:text-left">
                 <div className="flex flex-col lg:flex-row items-center gap-6">
                   <div className="flex-1 space-y-4">
-                    <h1 className="text-4xl lg:text-5xl font-bold">
-                      🧸 Sackboy Studio
-                    </h1>
-                    <p className="text-lg lg:text-xl max-w-3xl leading-relaxed">
-                      Welcome to the magical world of craft and creativity! Transform your photos into cozy knitted burlap plush scenes inspired by the whimsical universe of LittleBigPlanet.
-                      Create your own Sackboy adventure with the power of imagination and AI.
-                    </p>
+                    <div className="card p-4 flex items-center gap-3 justify-center lg:justify-start">
+                      <img src="/favicon.webp" className="w-[50px] h-auto" alt="Sackboy Studio Icon" />
+                      <h1 className="text-4xl lg:text-5xl font-bold">
+                        🧸 Sackboy Studio
+                      </h1>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <p className="text-lg lg:text-xl max-w-3xl leading-relaxed">
+                        Welcome to the magical world of craft and creativity! Transform your photos into cozy knitted
+                        burlap plush scenes inspired by the whimsical universe of LittleBigPlanet.
+                        Create your own Sackboy adventure with the power of imagination and AI.
+                      </p>
+                    </div>
                     <div className="flex flex-wrap gap-2 justify-center lg:justify-start">
-              <span className="px-3 py-1 bg-gradient-to-r from-orange-500 to-yellow-500 text-white text-sm rounded-full font-medium">
+              <span
+                  className="px-3 py-1 bg-gradient-to-r from-orange-500 to-yellow-500 text-white text-sm rounded-full font-medium">
                 ✨ Craft Magic
               </span>
-                      <span className="px-3 py-1 bg-gradient-to-r from-green-500 to-blue-500 text-white text-sm rounded-full font-medium">
+                      <span
+                          className="px-3 py-1 bg-gradient-to-r from-green-500 to-blue-500 text-white text-sm rounded-full font-medium">
                 🎨 Creative Studio
               </span>
-                      <span className="px-3 py-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-sm rounded-full font-medium">
+                      <span
+                          className="px-3 py-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-sm rounded-full font-medium">
                 🌟 LBP Inspired
               </span>
                     </div>
@@ -526,7 +535,7 @@ export default function Page() {
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div className="space-y-2">
-                    <h3 className="font-medium text-orange-300">🧸 Sackboy</h3>
+                    <h3 className="font-medium text-orange-300">��� Sackboy</h3>
                     <p className="text-sm opacity-75">
                       The loveable knitted character made of burlap and stuffing, with a zipper for a mouth.
                       Sackboy represents creativity, friendship, and the joy of crafting in the Imagisphere.
@@ -586,7 +595,7 @@ export default function Page() {
               </section>
 
               {/* Footer with craft aesthetic */}
-              <footer className="text-center space-y-4 pt-8 border-t ">
+              <footer className="card p-6 text-center space-y-4">
                 <div className="flex justify-center items-center gap-4 flex-wrap">
                   <span className="text-2xl">🧸</span>
                   <span className="text-2xl">✂️</span>
