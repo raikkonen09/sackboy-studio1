@@ -360,15 +360,92 @@ footer p {
   .card {
     border-width: 2px;
     border-radius: 16px;
+    margin: 0 8px;
   }
 
   .btn {
-    padding: 12px 20px;
+    padding: 10px 16px;
     border-radius: 16px;
+    font-size: 0.75rem;
+    min-height: 44px; /* Minimum touch target size */
   }
 
   h1 {
-    font-size: 2rem;
+    font-size: 1.75rem;
+    line-height: 1.2;
+  }
+
+  h2 {
+    font-size: 1.25rem;
+  }
+
+  h3 {
+    font-size: 1.125rem;
+  }
+
+  /* Better spacing for mobile */
+  .space-y-6 > * + * {
+    margin-top: 1rem;
+  }
+
+  .space-y-4 > * + * {
+    margin-top: 0.75rem;
+  }
+
+  /* Mobile-optimized image sizes */
+  .showcase-image {
+    max-width: 280px;
+    max-height: 280px;
+  }
+
+  /* Touch-friendly buttons */
+  .grid > button {
+    min-height: 44px;
+    padding: 12px 8px;
+  }
+
+  /* Better modal for mobile */
+  .modal-content {
+    margin: 16px;
+    max-width: calc(100vw - 32px);
+    max-height: calc(100vh - 32px);
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 480px) {
+  .container {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .card {
+    padding: 16px;
+    margin: 0 4px;
+  }
+
+  .btn {
+    padding: 8px 12px;
+    font-size: 0.7rem;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  /* Grid adjustments for very small screens */
+  .grid-cols-4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .grid-cols-3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* Stack images vertically on very small screens */
+  .showcase-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
   }
 }
 

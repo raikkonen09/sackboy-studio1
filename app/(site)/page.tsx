@@ -270,44 +270,44 @@ export default function Page() {
             </main>
         ) : (
             // Show full interface
-            <main className="container py-10 space-y-10">
+            <main className="container py-6 md:py-10 space-y-6 md:space-y-10">
               {/* Hero Header with LittleBigPlanet inspiration */}
-              <header className="card p-6 space-y-6 text-center lg:text-left">
-                <div className="flex flex-col lg:flex-row items-center gap-6">
-                  <div className="flex-1 space-y-4">
-                    <div className="card p-4 flex items-center gap-3 justify-center lg:justify-start">
-                      <img src="/favicon.webp" className="w-[50px] h-auto" alt="Sackboy Studio Icon" />
-                      <h1 className="text-4xl lg:text-5xl font-bold">
+              <header className="card p-4 md:p-6 space-y-4 md:space-y-6 text-center lg:text-left">
+                <div className="flex flex-col lg:flex-row items-center gap-4 md:gap-6">
+                  <div className="flex-1 space-y-3 md:space-y-4">
+                    <div className="card p-3 md:p-4 flex flex-col sm:flex-row items-center gap-2 md:gap-3 justify-center lg:justify-start">
+                      <img src="/favicon.webp" className="w-[40px] sm:w-[50px] h-auto" alt="Sackboy Studio Icon" />
+                      <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-center sm:text-left">
                          Sackboy Studio
                       </h1>
                     </div>
                     <div className="flex items-center gap-3">
-                      <p className="text-lg lg:text-xl max-w-3xl leading-relaxed">
+                      <p className="text-base sm:text-lg lg:text-xl max-w-3xl leading-relaxed px-2 sm:px-0">
                         Welcome to the magical world of craft and creativity! Transform your photos into cozy knitted
                         burlap plush scenes inspired by the whimsical universe of $Sackboys.
                         Create your own Sackboy adventure with the power of imagination and AI.
-                        <br/><span className="text-orange-400 font-medium">Join the $Sackboys cult!<br/>
+                        <br/><span className="text-orange-400 font-medium break-all sm:break-normal">Join the $Sackboys cult!<br/>
                         CA: 5umdEnYVe9c7YsGWzBAW1xbBGYDF6BwW8qruFmmPbonk</span>
                       </p>
                     </div>
-                    <div className="flex flex-wrap gap-2 justify-center lg:justify-start">
+                    <div className="flex flex-wrap gap-2 justify-center lg:justify-start px-2 sm:px-0">
               <span
-                  className="px-3 py-1 bg-gradient-to-r from-orange-500 to-yellow-500 text-white text-sm rounded-full font-medium">
+                  className="px-2 md:px-3 py-1 bg-gradient-to-r from-orange-500 to-yellow-500 text-white text-xs md:text-sm rounded-full font-medium">
                 ✨ Craft Magic
               </span>
                       <span
-                          className="px-3 py-1 bg-gradient-to-r from-green-500 to-blue-500 text-white text-sm rounded-full font-medium">
+                          className="px-2 md:px-3 py-1 bg-gradient-to-r from-green-500 to-blue-500 text-white text-xs md:text-sm rounded-full font-medium">
                 🎨 Creative Studio
               </span>
                       <span
-                          className="px-3 py-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-sm rounded-full font-medium">
+                          className="px-2 md:px-3 py-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xs md:text-sm rounded-full font-medium">
                 🌟 LBP Inspired
               </span>
                     </div>
                   </div>
 
                   {/* Placeholder for Sackboy character image */}
-                  <div className="w-48 h-48 lg:w-64 lg:h-64 flex-shrink-0">
+                  <div className="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 lg:w-64 lg:h-64 flex-shrink-0">
                     <img
                       src="/sackboy-bonk.png"
                       alt="Sackboy Character"
@@ -319,14 +319,14 @@ export default function Page() {
               </header>
 
               {/* Main Content Grid */}
-              <section className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              <section className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
                 {/* Controls Panel */}
-                <div className="card p-6 lg:col-span-1 space-y-6">
+                <div className="card p-4 md:p-6 lg:col-span-1 space-y-4 md:space-y-6">
                   <div className="space-y-2">
-                    <h2 className="text-xl font-semibold text-orange-400 flex items-center gap-2">
+                    <h2 className="text-lg md:text-xl font-semibold text-orange-400 flex items-center gap-2">
                       🎛️ Craft Controls
                     </h2>
-                    <p className="text-sm opacity-75">
+                    <p className="text-xs md:text-sm opacity-75">
                       Customize your $Sackboys adventure
                     </p>
                   </div>
@@ -365,7 +365,7 @@ export default function Page() {
                               style={{ width: `${progress}%` }}
                           ></div>
                         </div>
-                        <div aria-live="polite" className="text-sm text-center opacity-75">
+                        <div aria-live="polite" className="text-xs md:text-sm text-center opacity-75">
                           🎨 Crafting magic... {progress}%
                           {progressMessage && (
                               <div className="text-xs mt-1 opacity-60">{progressMessage}</div>
@@ -375,8 +375,8 @@ export default function Page() {
                   )}
 
                   {/* LittleBigPlanet Tips */}
-                  <div className="bg-gradient-to-br from-orange-900/30 to-yellow-900/30 border border-orange-500/30 rounded-xl p-4 space-y-2">
-                    <h3 className="text-sm font-semibold text-orange-300 flex items-center gap-2">
+                  <div className="bg-gradient-to-br from-orange-900/30 to-yellow-900/30 border border-orange-500/30 rounded-xl p-3 md:p-4 space-y-2">
+                    <h3 className="text-xs md:text-sm font-semibold text-orange-300 flex items-center gap-2">
                       💡 Craft Tips
                     </h3>
                     <ul className="text-xs space-y-1 opacity-75">
@@ -389,7 +389,7 @@ export default function Page() {
                 </div>
 
                 {/* Image Display Area */}
-                <div className="card p-6 lg:col-span-2 space-y-6">
+                <div className="card p-4 md:p-6 lg:col-span-2 space-y-4 md:space-y-6">
                   <div className="space-y-2">
                     <h2 className="text-xl font-semibold text-orange-400 flex items-center gap-2">
                       🖼️ Your Creation
@@ -597,22 +597,21 @@ export default function Page() {
               </section>
 
               {/* Footer with craft aesthetic */}
-              <footer className="card p-6 text-center space-y-4">
-                <div className="flex justify-center items-center gap-4 flex-wrap">
-                  <span className="text-2xl">🧸</span>
-                  <span className="text-2xl">✂️</span>
-                  <span className="text-2xl">🧵</span>
-                  <span className="text-2xl">🎨</span>
-                  <span className="text-2xl">✨</span>
+              <footer className="card p-4 md:p-6 text-center space-y-4">
+                <div className="flex justify-center items-center gap-2 md:gap-4 flex-wrap">
+                  <span className="text-xl md:text-2xl">🧸</span>
+                  <span className="text-xl md:text-2xl">✂️</span>
+                  <span className="text-xl md:text-2xl">🧵</span>
+                  <span className="text-xl md:text-2xl">🎨</span>
+                  <span className="text-xl md:text-2xl">✨</span>
                 </div>
-                <p className="text-sm opacity-60 max-w-2xl mx-auto">
+                <p className="text-xs md:text-sm opacity-60 max-w-2xl mx-auto px-2">
                   Sackboy Studio uses OpenAI image generation to create magical transformations.
                   We describe a "knitted burlap plush craft" style inspired by the wonderful world of LittleBigPlanet,
                   avoiding trademarks while celebrating the creative spirit of the franchise.
                 </p>
-                <p className="text-xs opacity-40">
+                <p className="text-xs opacity-40 px-2 break-all">
                   Made with ❤️ for the $Sackboys community • Not affiliated with Sony or Media Molecule
-
                   <br/>CA: 5umdEnYVe9c7YsGWzBAW1xbBGYDF6BwW8qruFmmPbonk
                 </p>
               </footer>
