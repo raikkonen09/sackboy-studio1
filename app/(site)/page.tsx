@@ -310,7 +310,7 @@ export default function Page() {
                       src="/sackboy-bonk.png"
                       alt="Sackboy Character"
                       className="w-full h-full object-contain cursor-pointer hover:opacity-90 transition-opacity"
-                      onClick={() => handleImageClick("/sackboy1.png", "Sackboy Character")}
+                      onClick={() => handleImageClick("/sackboy-bonk.png", "Sackboy Character")}
                     />
                   </div>
                 </div>
