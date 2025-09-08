@@ -2,8 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Import Google Fonts for a playful, craft-like feel */
-@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&family=Nunito:wght@300;400;500;600;700;800&display=swap');
+/* Import local Nice Sugar font and Google Fonts for fallbacks */
+@font-face {
+  font-family: 'Nice Sugar';
+  src: url('/fonts/nice-sugar/Nice Sugar.ttf') format('truetype'),
+       url('/fonts/nice-sugar/Nice Sugar.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Bubblegum+Sans&family=Fredoka:wght@300;400;500;600;700&family=Comfortaa:wght@300;400;500;600;700&display=swap');
 
 :root {
   color-scheme: dark;
@@ -28,7 +37,7 @@
 html,
 body {
   @apply min-h-screen;
-  font-family: 'Nunito', sans-serif;
+  font-family: 'Nice Sugar', 'Bubblegum Sans', 'Comfortaa', 'Fredoka', sans-serif;
   background: url('/background.png') repeat;
   background-size: 400px 400px;
   color: var(--lbp-cream);
@@ -85,7 +94,7 @@ body::before {
 /* Playful button styling inspired by LBP UI */
 .btn {
   @apply inline-flex items-center gap-2 px-6 py-3 rounded-2xl transition-all duration-200;
-  font-family: 'Fredoka', sans-serif;
+  font-family: 'Nice Sugar', 'Bubblegum Sans', 'Comfortaa', 'Fredoka', sans-serif;
   font-weight: 500;
   background: linear-gradient(145deg, var(--lbp-orange) 0%, #E67300 100%);
   color: white;
@@ -139,7 +148,7 @@ body::before {
   background: linear-gradient(145deg, #2A1A10 0%, #1F1409 100%);
   border: 2px solid rgba(255, 140, 0, 0.3);
   color: var(--lbp-cream);
-  font-family: 'Nunito', sans-serif;
+  font-family: 'Nice Sugar', 'Bubblegum Sans', 'Comfortaa', 'Fredoka', sans-serif;
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
@@ -157,14 +166,14 @@ body::before {
 /* Playful label styling */
 .label {
   @apply text-sm font-medium;
-  font-family: 'Fredoka', sans-serif;
+  font-family: 'Nice Sugar', 'Bubblegum Sans', 'Comfortaa', 'Fredoka', sans-serif;
   color: var(--lbp-cream);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 /* Header styling with craft aesthetic */
 h1 {
-  font-family: 'Fredoka', sans-serif;
+  font-family: 'Nice Sugar', 'Bubblegum Sans', 'Comfortaa', 'Fredoka', sans-serif;
   font-weight: 700;
   color: var(--lbp-orange);
   text-shadow:
@@ -191,7 +200,7 @@ h1::after {
 
 /* Subtitle and description styling */
 p {
-  font-family: 'Nunito', sans-serif;
+  font-family: 'Nice Sugar', 'Bubblegum Sans', 'Comfortaa', 'Fredoka', sans-serif;
   line-height: 1.6;
   color: rgba(245, 245, 220, 0.9);
   text-shadow:
@@ -285,7 +294,7 @@ img:hover {
 
 /* Footer styling */
 footer {
-  font-family: 'Nunito', sans-serif;
+  font-family: 'Nice Sugar', 'Bubblegum Sans', 'Comfortaa', 'Fredoka', sans-serif;
   color: rgba(245, 245, 220, 0.6);
   font-size: 0.875rem;
 }
@@ -378,7 +387,7 @@ footer p {
   justify-content: center;
   min-height: 200px;
   color: rgba(245, 245, 220, 0.7);
-  font-family: 'Fredoka', sans-serif;
+  font-family: 'Nice Sugar', 'Bubblegum Sans', 'Comfortaa', 'Fredoka', sans-serif;
   font-weight: 500;
   text-align: center;
   position: relative;
