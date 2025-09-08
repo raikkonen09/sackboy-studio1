@@ -63,10 +63,10 @@ export default function ControlsPanel({ onChange }: { onChange: (v: ControlsValu
             <button
               key={s}
               className={clsx(
-                'btn text-xs font-medium transition-all duration-200',
+                'btn text-xs',
                 values.size === s
-                  ? 'bg-orange-500 text-white border-orange-500 shadow-lg transform scale-105'
-                  : 'bg-orange-100/20 text-orange-200 border-orange-300/50 hover:bg-orange-200/30 hover:text-orange-100 hover:border-orange-400/70'
+                  ? 'selected'
+                  : ''
               )}
               onClick={() => setValues((v) => ({ ...v, size: s }))}
             >
@@ -147,10 +147,10 @@ export default function ControlsPanel({ onChange }: { onChange: (v: ControlsValu
             <button
               key={mode}
               className={clsx(
-                'btn text-xs font-medium transition-all duration-200',
+                'btn text-xs',
                 values.generationMode === mode
-                  ? 'bg-orange-500 text-white border-orange-500 shadow-lg transform scale-105'
-                  : 'bg-orange-100/20 text-orange-200 border-orange-300/50 hover:bg-orange-200/30 hover:text-orange-100 hover:border-orange-400/70'
+                  ? 'selected'
+                  : ''
               )}
               onClick={() => setValues((v) => ({ ...v, generationMode: mode }))}
             >
