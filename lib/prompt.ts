@@ -48,7 +48,7 @@ export function buildPrompt({ styleStrength, diorama, customPrompt, removeCaptio
       'Transform all characters from the uploaded image into Sackboy-style figures from Little Big Planet, with burlap plush textures, yarn stitching, and button-like eyes.',
       'Preserve each subject\'s unique facial expression, posture, identity, and the original environment and composition.',
       'Ensure that the overall image style, lighting, and atmosphere remain faithful to the source photo.',
-      'Emphasize cozy handcrafted aesthetics: knit seams, soft felt surfaces, subtle fabric fraying, photorealistic craft materials.'
+      'Emphasize cozy handcrafted aesthetics: knit seams, soft felt surfaces, subtle fabric fraying, photorealistic craft materials. Keep it easily relatable to original image'
     );
   }
 
