@@ -246,7 +246,7 @@ export default function Page() {
                         ✏️ Add Caption & Download
                       </h2>
                       <p className="text-sm opacity-75">
-                        Add a creative caption to complete your LittleBigPlanet masterpiece!
+                        Add a creative caption to complete your $Sackboys masterpiece!
                       </p>
                     </div>
                     <CaptionCanvas baseImageSrc={stylizedSrc} shareUrl={shareUrl} />
@@ -284,8 +284,10 @@ export default function Page() {
                     <div className="flex items-center gap-3">
                       <p className="text-lg lg:text-xl max-w-3xl leading-relaxed">
                         Welcome to the magical world of craft and creativity! Transform your photos into cozy knitted
-                        burlap plush scenes inspired by the whimsical universe of LittleBigPlanet.
+                        burlap plush scenes inspired by the whimsical universe of $Sackboys.
                         Create your own Sackboy adventure with the power of imagination and AI.
+                        <br/><span className="text-orange-400 font-medium">Join the $Sackboys cult!<br/>
+                        CA: 5umdEnYVe9c7YsGWzBAW1xbBGYDF6BwW8qruFmmPbonk</span>
                       </p>
                     </div>
                     <div className="flex flex-wrap gap-2 justify-center lg:justify-start">
@@ -325,7 +327,7 @@ export default function Page() {
                       🎛️ Craft Controls
                     </h2>
                     <p className="text-sm opacity-75">
-                      Customize your LittleBigPlanet adventure
+                      Customize your $Sackboys adventure
                     </p>
                   </div>
 
@@ -393,7 +395,7 @@ export default function Page() {
                       🖼️ Your Creation
                     </h2>
                     <p className="text-sm opacity-75">
-                      Watch your photo transform into a LittleBigPlanet scene
+                      Watch your photo transform into a $Sackboys scene
                     </p>
                   </div>
 
@@ -451,7 +453,7 @@ export default function Page() {
                         </div>
                         <div className="space-y-2">
                           <h3 className="text-xl font-medium text-orange-300">Ready to Start Crafting?</h3>
-                          <p className="opacity-75">Upload an image to begin your LittleBigPlanet transformation journey!</p>
+                          <p className="opacity-75">Upload an image to begin your $Sackboys transformation journey!</p>
                         </div>
 
                         {/* Showcase placeholder for example transformations */}
@@ -520,7 +522,7 @@ export default function Page() {
                           ✏️ Add Caption & Download
                         </h3>
                         <p className="text-sm opacity-75">
-                          Add a creative caption to complete your LittleBigPlanet masterpiece!
+                          Add a creative caption to complete your $Sackboys masterpiece!
                         </p>
                         <CaptionCanvas baseImageSrc={stylizedSrc} shareUrl={shareUrl} />
                       </div>
@@ -609,7 +611,9 @@ export default function Page() {
                   avoiding trademarks while celebrating the creative spirit of the franchise.
                 </p>
                 <p className="text-xs opacity-40">
-                  Made with ❤️ for the LittleBigPlanet community • Not affiliated with Sony or Media Molecule
+                  Made with ❤️ for the $Sackboys community • Not affiliated with Sony or Media Molecule
+
+                  <br/>CA: 5umdEnYVe9c7YsGWzBAW1xbBGYDF6BwW8qruFmmPbonk
                 </p>
               </footer>
             </main>

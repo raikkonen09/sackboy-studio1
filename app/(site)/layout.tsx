@@ -2,19 +2,19 @@ import './globals.css'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Sackboy Studio - Craft Your LittleBigPlanet Adventure',
+  title: 'Sackboy Studio - Craft Your $Sackboys Adventure',
   description: 'Transform your photos into magical knitted burlap plush craft scenes inspired by the whimsical world of Sackboy and LittleBigPlanet. Create, customize, and share your own cozy craft adventures!',
   keywords: 'Sackboy, LittleBigPlanet, craft, knitted, burlap, plush, photo transformation, creative studio',
   authors: [{ name: 'Sackboy Studio' }],
   openGraph: {
-    title: 'Sackboy Studio - Craft Your LittleBigPlanet Adventure',
+    title: 'Sackboy Studio - Craft Your $Sackboys Adventure',
     description: 'Transform your photos into magical knitted burlap plush craft scenes inspired by Sackboy and LittleBigPlanet',
     type: 'website',
     locale: 'en_US',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Sackboy Studio - Craft Your LittleBigPlanet Adventure',
+    title: 'Sackboy Studio - Craft Your $Sackboys Adventure',
     description: 'Transform your photos into magical knitted burlap plush craft scenes inspired by Sackboy and LittleBigPlanet',
   },
   icons: {
