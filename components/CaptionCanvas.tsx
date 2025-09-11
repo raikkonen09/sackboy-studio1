@@ -149,6 +149,33 @@ export default function CaptionCanvas({ baseImageSrc, shareUrl }: Props) {
     });
   }
 
+  function postToX() {
+    // Get the canvas image as a data URL
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    // Create the tweet text
+    const tweetText = `${caption ? caption + '\n\n' : ''}Made with Sackboy Studio \n\nsackboy-studio.xyz\n\n$Sackboys #Sackboys #Sackboy`;
+
+    // Create Twitter intent URL for posting with text
+    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}${shareUrl ? `&url=${encodeURIComponent(shareUrl)}` : ''}`;
+
+    // Open Twitter in a new window
+    window.open(twitterUrl, '_blank', 'width=550,height=420');
+  }
+
+  // X (Twitter) Icon Component
+  const XIcon = () => (
+    <svg
+      viewBox="0 0 24 24"
+      className="w-5 h-5"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+    </svg>
+  );
+
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -208,6 +235,10 @@ export default function CaptionCanvas({ baseImageSrc, shareUrl }: Props) {
             Copy link
           </button>
         )}
+        <button className="btn" onClick={postToX}>
+          <XIcon />
+          Post to X
+        </button>
       </div>
     </div>
   );
