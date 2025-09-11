@@ -11,11 +11,29 @@ export const metadata: Metadata = {
     description: 'Transform your photos into magical knitted burlap plush craft scenes inspired by Sackboy and LittleBigPlanet',
     type: 'website',
     locale: 'en_US',
+    url: 'https://sackboy-studio.xyz',
+    siteName: 'Sackboy Studio',
+    images: [
+      {
+        url: 'https://sackboy-studio.xyz/random1.png',
+        width: 1200,
+        height: 630,
+        alt: 'Sackboy Studio - Craft Your $Sackboys Adventure',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Sackboy Studio - Craft Your $Sackboys Adventure',
     description: 'Transform your photos into magical knitted burlap plush craft scenes inspired by Sackboy and LittleBigPlanet',
+    site: '@sackboy_studio',
+    creator: '@sackboy_studio',
+    images: [
+      {
+        url: 'https://sackboy-studio.xyz/favicon.webp',
+        alt: 'Sackboy Studio - Craft Your $Sackboys Adventure',
+      },
+    ],
   },
   icons: {
     icon: '/favicon.webp',
