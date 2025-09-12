@@ -11,7 +11,7 @@ export type ControlsValues = {
   keepPrivate: boolean;
   customPrompt: string;
   removeCaptions: boolean;
-  generationMode: 'transform' | 'add_sackboy' | 'random_crypto';
+  generationMode: 'transform' | 'add_sackboy' | 'random_crypto' | 'pokemon_card';
   result: Response | null;
 };
 
@@ -142,8 +142,8 @@ export default function ControlsPanel({ onChange }: { onChange: (v: ControlsValu
 
       <div>
         <label className="label">Generation Mode</label>
-        <div className="mt-2 grid grid-cols-3 gap-2">
-          {(['transform', 'add_sackboy', 'random_crypto'] as const).map((mode) => (
+        <div className="mt-2 grid grid-cols-4 gap-2">
+          {(['transform', 'add_sackboy', 'random_crypto', 'pokemon_card'] as const).map((mode) => (
             <button
               key={mode}
               className={clsx(
@@ -154,7 +154,7 @@ export default function ControlsPanel({ onChange }: { onChange: (v: ControlsValu
               )}
               onClick={() => setValues((v) => ({ ...v, generationMode: mode }))}
             >
-              {mode === 'transform' ? 'Transform All' : mode === 'add_sackboy' ? 'Add Sackboy' : 'Random Sackboy'}
+              {mode === 'transform' ? 'Transform All' : mode === 'add_sackboy' ? 'Add Sackboy' : mode === 'random_crypto' ? 'Random Sackboy' : 'Pokémon Card'}
             </button>
           ))}
         </div>

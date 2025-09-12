@@ -81,6 +81,219 @@ export async function POST(req: NextRequest) {
           return;
         }
 
+        // Handle Pokemon card generation (no image editing, use gpt-image-1 generation)
+        if (generationMode === 'pokemon_card') {
+          sendProgress(10, 'Generating Sackmon card prompt...');
+
+          // Generate a Pokemon card prompt using OpenAI Responses API
+          const promptGenerationRes = await fetch('https://api.openai.com/v1/responses', {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${apiKey}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              model: 'gpt-4o',
+              "input": `Generate a Pokémon trading card featuring Sackboy reimagined as a random Pokémon. 
+
+**Card Requirements:**
+- Card layout, fonts, borders, and design must closely resemble an official Pokémon card
+- Include Sackboy styled to match the chosen Pokémon's type, abilities, and energy symbols while still keeping his iconic knitted burlap body, visible stitched seams, zipper chest detail, yarn textures, and button-like eyes
+- Place Sackboy in a background setting that matches the Pokémon's natural habitat (e.g., forest, ocean, cave, volcano, space, mountains, etc.)
+- Give him an authentic Pokémon move set with realistic names and damage numbers
+- Include weakness, resistance, retreat cost, HP, and attack effects in the same style as real Pokémon cards
+- Add card rarity details (holo, rare, common, etc.), illustrator tag, and legal fine print for authenticity
+- Each generation should pick a random Pokémon type (Fire, Water, Grass, Electric, Psychic, Dark, Steel, Fairy, Dragon, Fighting, Ground, Rock, Ghost, Normal, Bug, Ice, Poison)
+- Ensure the card looks collectible, polished, and indistinguishable from official Pokémon cards
+
+**Crypto-Themed Elements:**
+- Skills and abilities or weaknesses presented on the card must have something to do with the cryptocurrency universe
+- Creative crypto ability examples: "Diamond Hands" (prevents retreat), "Whale Move" (massive damage), "HODL Stance" (defense boost), "Paper Hands" (weakness), "Moon Shot" (high damage attack), "Bear Market" (status effect), "Bull Run" (speed boost), "Rug Pull" (opponent discard), "To The Moon" (flying attack), "Chad Energy" (power boost), "Ape Together Strong" (team attack), "FUD Immunity" (status protection), "Pump and Dump" (variable damage), "Diamond Body" (damage reduction), "Crypto Winter" (ice attack), "Satoshi's Blessing" (energy acceleration)
+
+**Pokemon Selection:**
+${customPrompt ? `SPECIFIC REQUEST: Focus on incorporating "${customPrompt}" into the card design, name, or abilities.` : 'Choose a completely random Pokémon type and base Sackboy\'s design on a random existing Pokémon from that type.'}
+
+Create a detailed prompt that will generate an authentic-looking Pokémon trading card with Sackboy as the featured creature, complete with crypto-themed abilities while maintaining the professional quality and layout of official Pokémon cards.`
+            }),
+            signal: abortController.signal
+          });
+
+          if (!promptGenerationRes.ok) {
+            const errorData = await promptGenerationRes.json().catch(() => ({}));
+            throw new Error(`Failed to generate Sackmon card prompt: ${errorData?.error?.message || 'Unknown error'}`);
+          }
+
+          const promptData = await promptGenerationRes.json();
+          const generatedPrompt = promptData.output?.[0]?.content?.[0]?.text?.trim();
+
+          if (!generatedPrompt) {
+            throw new Error('No Sackmon card prompt generated from OpenAI Responses API');
+          }
+
+          console.log('Generated Sackmon card prompt:', generatedPrompt);
+          sendProgress(20, 'Creating Sackmon trading card...');
+
+          // Start intermediate progress updates while waiting for image generation
+          progressInterval = setInterval(() => {
+            if (currentProgress < 85) {
+              const increment = Math.random() * 5 + 2; // Random increment between 2-7
+              const newProgress = Math.min(currentProgress + increment, 85);
+              const messages = [
+                'Crafting card design...',
+                'Adding Pokémon elements...',
+                'Styling Sackmon details...',
+                'Rendering card artwork...',
+                'Almost ready...'
+              ];
+              const message = messages[Math.floor(Math.random() * messages.length)];
+              sendProgress(Math.floor(newProgress), message);
+            }
+          }, 2000); // Update every 2 seconds
+
+          // Now use gpt-image-1 to generate the Sackmon card with streaming
+          const imageGenerationRes = await fetch('https://api.openai.com/v1/images/generations', {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${apiKey}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              model: 'gpt-image-1',
+              prompt: generatedPrompt,
+              size: size === 'auto' ? '1024x1536' : size, // Card format works better in portrait
+              quality: 'high',
+              output_format: 'png',
+              background: 'auto',
+              stream: true,
+              n: 1
+            }),
+            signal: abortController.signal
+          });
+
+          if (!imageGenerationRes.ok) {
+            const errorData = await imageGenerationRes.json().catch(() => ({}));
+            throw new Error(`gpt-image-1 generation failed: ${errorData?.error?.message || 'Unknown error'}`);
+          }
+
+          // Clear the progress interval since we're now processing the response
+          if (progressInterval) {
+            clearInterval(progressInterval);
+            progressInterval = null;
+          }
+
+          // Stream the response from gpt-image-1
+          const reader = imageGenerationRes.body?.getReader();
+          if (!reader) {
+            throw new Error('No reader available from gpt-image-1 response');
+          }
+
+          const decoder = new TextDecoder();
+          let buffer = '';
+          let finalImage = '';
+          let partialCount = 0;
+          let hasReceivedData = false;
+
+          try {
+            while (true) {
+              const { done, value } = await reader.read();
+
+              if (done) {
+                console.log('gpt-image-1 stream ended');
+                break;
+              }
+
+              hasReceivedData = true;
+              buffer += decoder.decode(value, { stream: true });
+
+              const lines = buffer.split('\n');
+              buffer = lines.pop() || '';
+
+              for (const line of lines) {
+                if (line.startsWith('event: ')) {
+                  continue;
+                }
+
+                if (line.startsWith('data: ')) {
+                  try {
+                    const jsonStr = line.slice(6).trim();
+                    if (jsonStr) {
+                      const data = JSON.parse(jsonStr);
+
+                      if (data.type === 'image_generation.partial_image') {
+                        partialCount++;
+                        const progress = Math.min(40 + (partialCount * 15), 85);
+
+                        controller.enqueue(encoder.encode(`data: ${JSON.stringify({
+                          type: 'partial',
+                          data: {
+                            imageBase64: `data:image/png;base64,${data.b64_json}`,
+                            partialIndex: data.partial_image_index || partialCount
+                          },
+                          progress: progress,
+                          message: `Generating Sackmon card... (partial ${partialCount})`
+                        })}\n\n`));
+
+                      } else if (data.type === 'image_generation.completed') {
+                        finalImage = data.b64_json;
+                        console.log('gpt-image-1 Sackmon card generation completed');
+
+                        controller.enqueue(encoder.encode(`data: ${JSON.stringify({
+                          type: 'progress',
+                          message: 'Finalizing Sackmon card...',
+                          progress: 90
+                        })}\n\n`));
+                      }
+                    }
+                  } catch (parseError) {
+                    console.error('Error parsing gpt-image-1 SSE data:', parseError);
+                  }
+                }
+              }
+            }
+          } finally {
+            // Always close the reader
+            reader.releaseLock();
+          }
+
+          if (!finalImage && hasReceivedData) {
+            console.error('No final Sackmon card image received despite getting data');
+            throw new Error('Sackmon card generation incomplete - no final image received');
+          }
+
+          if (!finalImage) {
+            console.error('No data received from gpt-image-1 for Sackmon card');
+            throw new Error('No response received from gpt-image-1 for Sackmon card');
+          }
+
+          // Handle image storage
+          let imageUrl: string | undefined;
+          if (!keepPrivate) {
+            try {
+              imageUrl = await maybeStoreImage(finalImage, `sackmon-card-${Date.now()}.png`);
+            } catch (error) {
+              console.error('Sackmon card image storage error:', error);
+            }
+          }
+
+          const timingMs = Date.now() - t0;
+          console.log(`Sackmon card generation completed in ${timingMs}ms`);
+
+          // Send final result
+          controller.enqueue(encoder.encode(`data: ${JSON.stringify({
+            type: 'complete',
+            data: {
+              imageBase64: `data:image/png;base64,${finalImage}`,
+              imageUrl,
+              meta: { size, generatedPrompt, timingMs }
+            },
+            progress: 100
+          })}\n\n`));
+
+          cleanup();
+          controller.close();
+          return;
+        }
+
         // Handle random crypto generation (no image editing, use gpt-image-1 generation)
         if (generationMode === 'random_crypto') {
           sendProgress(10, 'Generating creative prompt...');

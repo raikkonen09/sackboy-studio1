@@ -17,8 +17,8 @@ export async function parseForm(form: FormData) {
   const removeCaptions = form.get('removeCaptions')?.toString() === 'true';
   const generationMode = form.get('generationMode')?.toString() || 'transform';
 
-  // For random_crypto mode, we don't need an uploaded file
-  if (generationMode !== 'random_crypto') {
+  // For random_crypto and pokemon_card modes, we don't need an uploaded file
+  if (generationMode !== 'random_crypto' && generationMode !== 'pokemon_card') {
     if (!file || !(file instanceof Blob)) throw new Error('Missing image.');
 
     const FileSchema = z.object({
@@ -30,7 +30,7 @@ export async function parseForm(form: FormData) {
 
   const SizeSchema = z.enum(['1024x1024', '1024x1536', '1536x1024', 'auto']);
   const StyleSchema = z.enum(['low', 'medium', 'high']);
-  const GenerationModeSchema = z.enum(['transform', 'add_sackboy', 'random_crypto']);
+  const GenerationModeSchema = z.enum(['transform', 'add_sackboy', 'random_crypto', 'pokemon_card']);
 
   return {
     file: file as File | null,

@@ -225,6 +225,95 @@ export default function Page() {
     }
   };
 
+  const handleGeneratePokemonCard = async () => {
+    setLoading(true);
+    setProgress(0);
+
+    try {
+      const form = new FormData();
+      form.append('size', controlsRef.current.size);
+      form.append('styleStrength', controlsRef.current.styleStrength);
+      form.append('diorama', String(controlsRef.current.diorama));
+      form.append('private', String(controlsRef.current.keepPrivate));
+      form.append('customPrompt', controlsRef.current.customPrompt);
+      form.append('removeCaptions', String(controlsRef.current.removeCaptions));
+      form.append('generationMode', 'pokemon_card');
+
+      const res = await fetch('/api/stylize-stream', {
+        method: 'POST',
+        body: form
+      });
+
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+
+      const reader = res.body?.getReader();
+      const decoder = new TextDecoder();
+
+      if (!reader) {
+        throw new Error('No reader available');
+      }
+
+      let buffer = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+
+        if (done) break;
+
+        // Append new chunk to buffer
+        buffer += decoder.decode(value, { stream: true });
+
+        // Process complete lines from buffer
+        const lines = buffer.split('\n');
+
+        // Keep the last (potentially incomplete) line in buffer
+        buffer = lines.pop() || '';
+
+        for (const line of lines) {
+          if (line.startsWith('data: ')) {
+            try {
+              const jsonStr = line.slice(6).trim();
+              if (jsonStr) {
+                const data = JSON.parse(jsonStr);
+
+                switch (data.type) {
+                  case 'progress':
+                    setProgress(data.progress);
+                    setProgressMessage(data.message);
+                    console.log(`Progress: ${data.progress}% - ${data.message}`);
+                    break;
+
+                  case 'complete':
+                    const result = data.data;
+                    setStylizedSrc(result.imageBase64);
+                    setShareUrl(result.imageUrl || null);
+                    setProgress(100);
+                    setShowOnlyCaptionPanel(true);
+                    break;
+
+                  case 'error':
+                    throw new Error(data.message);
+
+                  default:
+                    console.log('Unknown message type:', data.type);
+                }
+              }
+            } catch (parseError) {
+              console.error('Error parsing SSE data:', parseError, 'Line:', line.slice(6));
+            }
+          }
+        }
+      }
+    } catch (e: any) {
+      alert(e?.message || 'Failed to generate Pokemon card.');
+    } finally {
+      setLoading(false);
+      setTimeout(() => setProgress(0), 800);
+    }
+  };
+
   /**
    * Handles opening an image in the modal
    */
@@ -339,7 +428,7 @@ export default function Page() {
                   }} />
 
                   <GenerateButton
-                      disabled={(!originalSrc && currentControls.generationMode !== 'random_crypto') || loading}
+                      disabled={(!originalSrc && currentControls.generationMode !== 'random_crypto' && currentControls.generationMode !== 'pokemon_card') || loading}
                       loading={loading}
                       progress={progress}
                       progressMessage={progressMessage}
@@ -347,6 +436,9 @@ export default function Page() {
                         if (currentControls.generationMode === 'random_crypto') {
                           // For random crypto generation, we don't need an uploaded image
                           handleGenerateRandom();
+                        } else if (currentControls.generationMode === 'pokemon_card') {
+                          // For Pokemon card generation, we don't need an uploaded image
+                          handleGeneratePokemonCard();
                         } else {
                           if (!originalSrc) return;
                           fetch(originalSrc)
@@ -441,6 +533,47 @@ export default function Page() {
                           </div>
                         </div>
                       </div>
+                  ) : currentControls.generationMode === 'pokemon_card' && !currentControls.result?.ok ? (
+                      <div className="text-center py-16 space-y-4">
+                        <div className="w-72 h-72 mx-auto">
+                          <img
+                            src="/sackboy4.png"
+                            alt="Sackmon Card Preview"
+                            className="w-full h-full object-contain cursor-pointer hover:opacity-90 transition-opacity"
+                            onClick={() => handleImageClick("/sackboy4.png", "Sackmon Card Preview")}
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <h3 className="text-2xl font-semibold text-orange-300">Sackmon Trading Card</h3>
+                          <p className="text-lg opacity-75">AI will create a unique Pokémon-style trading card featuring Sackboy!</p>
+                          <p className="text-sm opacity-60">just click Generate to create your random Sackmon card, or add extra prompt</p>
+                        </div>
+
+                        {/* Placeholder for Pokemon card elements */}
+                        <div className="grid grid-cols-3 gap-8 mt-8 max-w-2xl mx-auto">
+                          <div className="w-40 h-40 mx-auto cursor-pointer" onClick={() => handleImageClick("/sackboy5.png", "Card Design")}>
+                            <img
+                              src="/sackboy5.png"
+                              alt="Card Design"
+                              className="w-full h-full object-contain hover:opacity-80 transition-opacity"
+                            />
+                          </div>
+                          <div className="w-40 h-40 mx-auto cursor-pointer" onClick={() => handleImageClick("/sackboy2.png", "Sackboy Character")}>
+                            <img
+                              src="/sackboy2.png"
+                              alt="Sackboy Character"
+                              className="w-full h-full object-contain hover:opacity-80 transition-opacity"
+                            />
+                          </div>
+                          <div className="w-40 h-40 mx-auto cursor-pointer" onClick={() => handleImageClick("/sackboy3.png", "Trading Card Style")}>
+                            <img
+                              src="/sackboy3.png"
+                              alt="Trading Card Style"
+                              className="w-full h-full object-contain hover:opacity-80 transition-opacity"
+                            />
+                          </div>
+                        </div>
+                      </div>
                   ) : !originalSrc ? (
                       <div className="text-center py-16 space-y-4">
                         <div className="w-72 h-72 mx-auto">
@@ -511,6 +644,19 @@ export default function Page() {
                           alt="Generated Crypto Sackboy"
                           className="w-full rounded-xl cursor-pointer hover:opacity-90 transition-opacity"
                           onClick={() => handleImageClick(stylizedSrc, "Generated Crypto Sackboy")}
+                        />
+                      </div>
+                  )}
+
+                  {/* Generated image for pokemon card mode */}
+                  {stylizedSrc && currentControls.generationMode === 'pokemon_card' && (
+                      <div className="space-y-4">
+                        <h3 className="text-lg font-medium text-orange-300">Your Sackmon Trading Card</h3>
+                        <img
+                          src={stylizedSrc}
+                          alt="Generated Sackmon Card"
+                          className="w-full rounded-xl cursor-pointer hover:opacity-90 transition-opacity"
+                          onClick={() => handleImageClick(stylizedSrc, "Generated Sackmon Card")}
                         />
                       </div>
                   )}
