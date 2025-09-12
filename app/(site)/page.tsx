@@ -537,38 +537,38 @@ export default function Page() {
                       <div className="text-center py-16 space-y-4">
                         <div className="w-72 h-72 mx-auto">
                           <img
-                            src="/sackboy4.png"
+                            src="/pikachu.png"
                             alt="Sackmon Card Preview"
                             className="w-full h-full object-contain cursor-pointer hover:opacity-90 transition-opacity"
-                            onClick={() => handleImageClick("/sackboy4.png", "Sackmon Card Preview")}
+                            onClick={() => handleImageClick("/pikachu.png", "Sackmon Card Preview")}
                           />
                         </div>
                         <div className="space-y-2">
                           <h3 className="text-2xl font-semibold text-orange-300">Sackmon Trading Card</h3>
                           <p className="text-lg opacity-75">AI will create a unique Pokémon-style trading card featuring Sackboy!</p>
-                          <p className="text-sm opacity-60">just click Generate to create your random Sackmon card, or add extra prompt</p>
+                          <p className="text-sm opacity-60">No image upload needed - just click Generate to create your custom Sackmon card.</p>
                         </div>
 
                         {/* Placeholder for Pokemon card elements */}
                         <div className="grid grid-cols-3 gap-8 mt-8 max-w-2xl mx-auto">
-                          <div className="w-40 h-40 mx-auto cursor-pointer" onClick={() => handleImageClick("/sackboy5.png", "Card Design")}>
+                          <div className="w-40 h-40 mx-auto cursor-pointer" onClick={() => handleImageClick("/charizard.png", "Charizard Example")}>
                             <img
-                              src="/sackboy5.png"
-                              alt="Card Design"
+                              src="/charizard.png"
+                              alt="Charizard Example"
                               className="w-full h-full object-contain hover:opacity-80 transition-opacity"
                             />
                           </div>
-                          <div className="w-40 h-40 mx-auto cursor-pointer" onClick={() => handleImageClick("/sackboy2.png", "Sackboy Character")}>
+                          <div className="w-40 h-40 mx-auto cursor-pointer" onClick={() => handleImageClick("/blastoise.png", "Blastoise Example")}>
                             <img
-                              src="/sackboy2.png"
-                              alt="Sackboy Character"
+                              src="/blastoise.png"
+                              alt="Blastoise Example"
                               className="w-full h-full object-contain hover:opacity-80 transition-opacity"
                             />
                           </div>
-                          <div className="w-40 h-40 mx-auto cursor-pointer" onClick={() => handleImageClick("/sackboy3.png", "Trading Card Style")}>
+                          <div className="w-40 h-40 mx-auto cursor-pointer" onClick={() => handleImageClick("/pikachu1.png", "Pikachu Example")}>
                             <img
-                              src="/sackboy3.png"
-                              alt="Trading Card Style"
+                              src="/pikachu1.png"
+                              alt="Pikachu Example"
                               className="w-full h-full object-contain hover:opacity-80 transition-opacity"
                             />
                           </div>
