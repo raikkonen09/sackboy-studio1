@@ -108,7 +108,27 @@ export async function POST(req: NextRequest) {
 
 **Crypto-Themed Elements:**
 - Skills and abilities or weaknesses presented on the card must have something to do with the cryptocurrency universe
-- Creative crypto ability examples: "Diamond Hands" (prevents retreat), "Whale Move" (massive damage), "HODL Stance" (defense boost), "Paper Hands" (weakness), "Moon Shot" (high damage attack), "Bear Market" (status effect), "Bull Run" (speed boost), "Rug Pull" (opponent discard), "To The Moon" (flying attack), "Chad Energy" (power boost), "Ape Together Strong" (team attack), "FUD Immunity" (status protection), "Pump and Dump" (variable damage), "Diamond Body" (damage reduction), "Crypto Winter" (ice attack), "Satoshi's Blessing" (energy acceleration)
+- Creative crypto ability examples with crypto-themed descriptions:
+  - "Diamond Hands" (prevents retreat) - "This Pokémon never sells, no matter how much FUD spreads"
+  - "Whale Move" (massive damage) - "Makes a huge market impact that shakes the entire battlefield"
+  - "HODL Stance" (defense boost) - "Refuses to budge, increasing defense until the next bull run"
+  - "Paper Hands" (weakness) - "Panics and sells at the first sign of trouble"
+  - "Moon Shot" (high damage attack) - "Launches a powerful attack that sends opponents to the moon"
+  - "Bear Market" (status effect) - "Spreads negativity that reduces all opponents' stats"
+  - "Bull Run" (speed boost) - "Gains unstoppable momentum, doubling speed for 3 turns"
+  - "Rug Pull" (opponent discard) - "Forces opponent to discard their best cards unexpectedly"
+  - "To The Moon" (flying attack) - "Rockets upward with astronomical force"
+  - "Chad Energy" (power boost) - "Flexes with supreme confidence, boosting all attack damage"
+  - "Ape Together Strong" (team attack) - "Rally cry that powers up all team members simultaneously"
+  - "FUD Immunity" (status protection) - "Immune to fear, uncertainty, and doubt effects"
+  - "Pump and Dump" (variable damage) - "Damage varies wildly based on market manipulation"
+  - "Diamond Body" (damage reduction) - "Crystallized resolve that reduces all incoming damage"
+  - "Crypto Winter" (ice attack) - "Freezes the market and all opponent activities"
+  - "Satoshi's Blessing" (energy acceleration) - "Channels the founder's wisdom to gain extra energy"
+  - "DeFi Yield" (healing ability) - "Generates passive income that restores HP each turn"
+  - "Smart Contract" (binding effect) - "Creates unbreakable conditions that must be fulfilled"
+  - "Gas Fee Drain" (energy cost increase) - "Makes all opponent moves cost double energy"
+  - "Lambo Dreams" (speed burst) - "Dreams of luxury cars provide sudden speed boost"
 
 **Pokemon Selection:**
 ${customPrompt ? `SPECIFIC REQUEST: Focus on incorporating "${customPrompt}" into the card design, name, or abilities.` : 'Choose a completely random Pokémon type and base Sackboy\'s design on a random existing Pokémon from that type.'}
@@ -160,7 +180,7 @@ Create a detailed prompt that will generate an authentic-looking Pokémon tradin
             body: JSON.stringify({
               model: 'gpt-image-1',
               prompt: generatedPrompt,
-              size: size === 'auto' ? '1024x1536' : size, // Card format works better in portrait
+              size: 'auto', // Always use auto for Pokemon cards
               quality: 'high',
               output_format: 'png',
               background: 'auto',
