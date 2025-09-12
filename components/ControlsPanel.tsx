@@ -49,6 +49,10 @@ export default function ControlsPanel({ onChange }: { onChange: (v: ControlsValu
   });
 
   useEffect(() => {
+    // Auto-set size to 'auto' when pokemon_card mode is selected
+    if (values.generationMode === 'pokemon_card' && values.size !== 'auto') {
+      setValues((v) => ({ ...v, size: 'auto' }));
+    }
     onChange(values);
     // Return undefined explicitly to avoid cleanup function issues
     return undefined;
@@ -66,14 +70,29 @@ export default function ControlsPanel({ onChange }: { onChange: (v: ControlsValu
                 'btn text-xs',
                 values.size === s
                   ? 'selected'
+                  : '',
+                // Disable non-auto sizes when pokemon_card mode is selected
+                values.generationMode === 'pokemon_card' && s !== 'auto'
+                  ? 'opacity-50 cursor-not-allowed'
                   : ''
               )}
-              onClick={() => setValues((v) => ({ ...v, size: s }))}
+              onClick={() => {
+                // Only allow size change if not pokemon_card mode or if selecting auto
+                if (values.generationMode !== 'pokemon_card' || s === 'auto') {
+                  setValues((v) => ({ ...v, size: s }));
+                }
+              }}
+              disabled={values.generationMode === 'pokemon_card' && s !== 'auto'}
             >
               {getSizeLabel(s)}
             </button>
           ))}
         </div>
+        {values.generationMode === 'pokemon_card' && (
+          <p className="text-xs text-orange-300 mt-2 opacity-75">
+            Pokemon cards automatically use optimal sizing
+          </p>
+        )}
       </div>
 
       <div>

@@ -105,6 +105,15 @@ export async function POST(req: NextRequest) {
 - Add card rarity details (holo, rare, common, etc.), illustrator tag, and legal fine print for authenticity
 - Each generation should pick a random Pokémon type (Fire, Water, Grass, Electric, Psychic, Dark, Steel, Fairy, Dragon, Fighting, Ground, Rock, Ghost, Normal, Bug, Ice, Poison)
 - Ensure the card looks collectible, polished, and indistinguishable from official Pokémon cards
+- **IMPORTANT**: The card name must be a clever and funny wordplay combining the original Pokémon name with Sackboy or Little Big Planet terms. Examples:
+  - Pikachu → "Sackchu" or "Pikasack" or "Stitchachu"
+  - Charizard → "Sackarizard" or "Charisack" or "Burlpzard"
+  - Blastoise → "Sackoise" or "Blastosack" or "Stitchtoise"
+  - Bulbasaur → "Sackbasaur" or "Bulbsack" or "Yarnasaur"
+  - Geodude → "Sackdude" or "Geosack" or "Craftdude"
+  - Squirtle → "Sackirtle" or "Stitchtle" or "Zippertle"
+  - Mewtwo → "Sacktwo" or "Mewsack" or "Crafttwo"
+  - Be creative with fabric/craft terms: Stitch, Yarn, Burlap, Zip, Craft, Knit, Felt, Patch, Thread, Seam
 
 **Crypto-Themed Elements:**
 - Skills and abilities or weaknesses presented on the card must have something to do with the cryptocurrency universe
