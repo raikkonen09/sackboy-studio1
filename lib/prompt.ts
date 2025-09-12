@@ -3,7 +3,7 @@ export type PromptOptions = {
   diorama: boolean;
   customPrompt?: string;
   removeCaptions?: boolean;
-  generationMode?: 'transform' | 'add_sackboy' | 'random_crypto';
+  generationMode?: 'transform' | 'add_sackboy' | 'random_crypto' | 'pokemon_card';
 };
 
 /**
@@ -24,10 +24,14 @@ export function buildPrompt({ styleStrength, diorama, customPrompt, removeCaptio
     return parts.join(' ');
   }
 
-  // For random_crypto, we'll generate the prompt using OpenAI Responses API
-  // This function won't be called for that mode
+  // For random_crypto and pokemon_card, we'll generate the prompt using OpenAI Responses API
+  // This function won't be called for those modes
   if (generationMode === 'random_crypto') {
     throw new Error('Random crypto prompts should be generated via OpenAI Responses API');
+  }
+
+  if (generationMode === 'pokemon_card') {
+    throw new Error('Pokemon card prompts should be generated via OpenAI Responses API');
   }
 
   // Default prompt building for transform and add_sackboy modes
