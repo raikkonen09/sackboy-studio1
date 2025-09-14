@@ -93,7 +93,7 @@ export async function POST(req: NextRequest) {
               'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-              model: 'gpt-4o',
+              model: 'gpt-4o-mini',
               "input": `Generate a Pokémon trading card featuring Sackboy reimagined as a random Pokémon. 
 
 **Card Requirements:**
@@ -190,7 +190,7 @@ Create a detailed prompt that will generate an authentic-looking Pokémon tradin
               model: 'gpt-image-1',
               prompt: generatedPrompt,
               size: 'auto', // Always use auto for Pokemon cards
-              quality: 'high',
+              quality: 'medium',
               output_format: 'png',
               background: 'auto',
               stream: true,
@@ -335,7 +335,7 @@ Create a detailed prompt that will generate an authentic-looking Pokémon tradin
               'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-              model: 'gpt-4o',
+              model: 'gpt-4o-mini',
               "input": "Generate a random, funny, and imaginative image prompt featuring Sackboy from the video game Little Big Planet. In every generated prompt, clearly describe Sackboy himself in detail: a small, knitted burlap plush toy with visible stitched seams, a zipper chest detail, yarn textures, and button-like eyes. His world is playful and handcrafted, with cardboard sets, stickers, patchwork landscapes, felt props, and DIY gadgets. Place Sackboy in absurd, meme-worthy situations that sometimes (not always) mix his video games lore with crypto/memecoin culture. Each prompt should feel unpredictable, funny, and slightly chaotic, while staying true to Sackboy’s toy-like charm. Use maximum one crypto slang term or symbol per prompt (e.g.,‘diamond hands,’ ‘pump’, ‘whale’, 'hodl', 'chad', etc. Be creative ). Crypto should be randomly, but not always included in the prompt. Sometimes (but not always), include a playful nod to Bonk memecoin or Bonk Shiba Inu Dog, or Bonk Logo. The prompt should always describe Sackboy in detail, the scene, the setting, and Sackboy’s activity, making it humorous, detailed, and meme-worthy. It mostly should be meme-worthy, while making references existing popular memes, or being new creative and viral worthy memes. Do not include captions"
             }),
             signal: abortController.signal
