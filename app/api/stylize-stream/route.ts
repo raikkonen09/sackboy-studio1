@@ -384,7 +384,7 @@ Create a detailed prompt that will generate an authentic-looking Pokémon tradin
               model: 'gpt-image-1',
               prompt: generatedPrompt,
               size: size === 'auto' ? '1024x1024' : size,
-              quality: 'high',
+              quality: 'medium',
               output_format: 'png',
               background: 'auto',
               stream: true,
@@ -549,7 +549,7 @@ Create a detailed prompt that will generate an authentic-looking Pokémon tradin
         fd.append('prompt', prompt);
         fd.append('size', size);
         fd.append('input_fidelity', styleStrength === 'low' ? 'low' : 'high');
-        fd.append('quality', 'high');
+        fd.append('quality', 'medium');
         fd.append('output_format', 'png');
         fd.append('background', 'auto');
         fd.append('stream', 'true');
