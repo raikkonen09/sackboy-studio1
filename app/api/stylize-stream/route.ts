@@ -94,10 +94,7 @@ export async function POST(req: NextRequest) {
             },
             body: JSON.stringify({
               model: 'gpt-4o-mini',
-              "input": `Generate a Pokémon trading card featuring Sackboy reimagined as a random Pokémon. 
-
-**Card Requirements:**
-- Card layout, fonts, borders, and design must closely resemble an official Pokémon card
+              "input": `Generate a Pokémon trading card featuring Sackboy reimagined as a random Pokémon.
 - Include Sackboy styled to match the chosen Pokémon's type, abilities, and energy symbols while still keeping his iconic knitted burlap body, visible stitched seams, zipper chest detail, yarn textures, and button-like eyes
 - Place Sackboy in a background setting that matches the Pokémon's natural habitat (e.g., forest, ocean, cave, volcano, space, mountains, etc.)
 - Give him an authentic Pokémon move set with realistic names and damage numbers
@@ -146,8 +143,6 @@ Create a detailed prompt that will generate an authentic-looking Pokémon tradin
             }),
             signal: abortController.signal
           });
-
-          if (!promptGenerationRes.ok) {
             const errorData = await promptGenerationRes.json().catch(() => ({}));
             throw new Error(`Failed to generate Sackmon card prompt: ${errorData?.error?.message || 'Unknown error'}`);
           }
@@ -158,10 +153,10 @@ Create a detailed prompt that will generate an authentic-looking Pokémon tradin
           if (!generatedPrompt) {
             throw new Error('No Sackmon card prompt generated from OpenAI Responses API');
           }
-
+          const generatedPrompt = promptData.output?.[0]?.content?.[0]?.text?.trim();
           console.log('Generated Sackmon card prompt:', generatedPrompt);
           sendProgress(20, 'Creating Sackmon trading card...');
-
+            throw new Error('No Sackmon card prompt generated from OpenAI Responses API');
           // Start intermediate progress updates while waiting for image generation
           progressInterval = setInterval(() => {
             if (currentProgress < 85) {
@@ -332,21 +327,16 @@ Create a detailed prompt that will generate an authentic-looking Pokémon tradin
             method: 'POST',
             headers: {
               'Authorization': `Bearer ${apiKey}`,
-              'Content-Type': 'application/json'
-            },
+          // First, generate a creative memecoin prompt using OpenAI Responses API
+          const promptGenerationRes = await fetch('https://api.openai.com/v1/responses', {
             body: JSON.stringify({
               model: 'gpt-4o-mini',
               "input": "Generate a random, funny, and imaginative image prompt featuring Sackboy from the video game Little Big Planet. In every generated prompt, clearly describe Sackboy himself in detail: a small, knitted burlap plush toy with visible stitched seams, a zipper chest detail, yarn textures, and button-like eyes. His world is playful and handcrafted, with cardboard sets, stickers, patchwork landscapes, felt props, and DIY gadgets. Place Sackboy in absurd, meme-worthy situations that sometimes (not always) mix his video games lore with crypto/memecoin culture. Each prompt should feel unpredictable, funny, and slightly chaotic, while staying true to Sackboy’s toy-like charm. Use maximum one crypto slang term or symbol per prompt (e.g.,‘diamond hands,’ ‘pump’, ‘whale’, 'hodl', 'chad', etc. Be creative ). Crypto should be randomly, but not always included in the prompt. Sometimes (but not always), include a playful nod to Bonk memecoin or Bonk Shiba Inu Dog, or Bonk Logo. The prompt should always describe Sackboy in detail, the scene, the setting, and Sackboy’s activity, making it humorous, detailed, and meme-worthy. It mostly should be meme-worthy, while making references existing popular memes, or being new creative and viral worthy memes. Do not include captions"
             }),
             signal: abortController.signal
           });
-
-          if (!promptGenerationRes.ok) {
-            const errorData = await promptGenerationRes.json().catch(() => ({}));
-            throw new Error(`Failed to generate creative prompt: ${errorData?.error?.message || 'Unknown error'}`);
-          }
-
-          const promptData = await promptGenerationRes.json();
+              model: 'gpt-4o-mini',
+              "input": "Generate a random, funny, and imaginative image prompt featuring Sackboy from the video game Little Big Planet. In every generated prompt, clearly describe Sackboy himself in detail: a small, knitted burlap plush toy with visible stitched seams, a zipper chest detail, yarn textures, and button-like eyes. His world is playful and handcrafted, with cardboard sets, stickers, patchwork landscapes, felt props, and DIY gadgets. Place Sackboy in absurd, meme-worthy situations that sometimes (not always) mix his video games lore with crypto/memecoin culture. Each prompt should feel unpredictable, funny, and slightly chaotic, while staying true to Sackboy’s toy-like charm. Use maximum one crypto slang term or symbol per prompt (e.g.,‘diamond hands,’ ‘pump’, ‘whale’, 'hodl', 'chad', etc. Be creative ). Crypto should be randomly, but not always included in the prompt. Sometimes (but not always), include a playful nod to Bonk memecoin or Bonk Shiba Inu Dog, or Bonk Logo. The prompt should always describe Sackboy in detail, the scene, the setting, and Sackboy’s activity, making it humorous, detailed, and meme-worthy. It mostly should be meme-worthy, while making references existing popular memes, or being new creative and viral worthy memes. Do not include captions"
           const generatedPrompt = promptData.output?.[0]?.content?.[0]?.text?.trim();
 
           if (!generatedPrompt) {
@@ -357,10 +347,10 @@ Create a detailed prompt that will generate an authentic-looking Pokémon tradin
           sendProgress(20, 'Creating Sackboy memecoin artwork...');
 
           // Start intermediate progress updates while waiting for image generation
-          progressInterval = setInterval(() => {
+          const generatedPrompt = promptData.output?.[0]?.content?.[0]?.text?.trim();
             if (currentProgress < 85) {
               const increment = Math.random() * 5 + 2; // Random increment between 2-7
-              const newProgress = Math.min(currentProgress + increment, 85);
+            throw new Error('No prompt generated from OpenAI Responses API');
               const messages = [
                 'Crafting memecoin vibes...',
                 'Adding crypto elements...',
@@ -384,7 +374,7 @@ Create a detailed prompt that will generate an authentic-looking Pokémon tradin
               model: 'gpt-image-1',
               prompt: generatedPrompt,
               size: size === 'auto' ? '1024x1024' : size,
-              quality: 'medium',
+              quality: 'high',
               output_format: 'png',
               background: 'auto',
               stream: true,
@@ -394,7 +384,7 @@ Create a detailed prompt that will generate an authentic-looking Pokémon tradin
           });
 
           // Clear the progress interval once we get a response
-          if (progressInterval) {
+              quality: 'high',
             clearInterval(progressInterval);
             progressInterval = null;
           }
@@ -549,7 +539,7 @@ Create a detailed prompt that will generate an authentic-looking Pokémon tradin
         fd.append('prompt', prompt);
         fd.append('size', size);
         fd.append('input_fidelity', styleStrength === 'low' ? 'low' : 'high');
-        fd.append('quality', 'medium');
+        fd.append('quality', 'high');
         fd.append('output_format', 'png');
         fd.append('background', 'auto');
         fd.append('stream', 'true');
@@ -559,7 +549,7 @@ Create a detailed prompt that will generate an authentic-looking Pokémon tradin
 
         sendProgress(15, 'Connecting to OpenAI...');
 
-        // Start intermediate progress updates during the API call
+        fd.append('quality', 'high');
         progressInterval = setInterval(() => {
           if (currentProgress < 70) {
             const increment = Math.random() * 3 + 1; // Random increment between 1-4
